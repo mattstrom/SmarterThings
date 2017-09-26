@@ -1,0 +1,15 @@
+{
+  "name": "@mattstrom/smartthings",
+  "version": "1.0.0",
+  "description": "Solution containing various SmartThings projects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://mattstrom.visualstudio.com/DefaultCollection/_git/SmartThings"
+  },
+  "author": "Matt Strom",
+  "license": "ISC"
+}
