@@ -10,7 +10,6 @@ import {
 } from 'inversify-express-utils';
 
 import TYPES from '../di/types';
-import proxy from './proxy.middleware';
 
 
 // "clientId": "4575516e-9fa6-4c25-bd72-bb5884a3643f",
