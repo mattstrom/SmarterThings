@@ -11,5 +11,8 @@
     "url": "https://mattstrom.visualstudio.com/DefaultCollection/_git/SmartThings"
   },
   "author": "Matt Strom",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "lerna": "^2.4.0"
+  }
 }

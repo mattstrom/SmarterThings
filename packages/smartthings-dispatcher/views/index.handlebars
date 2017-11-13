@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>OAuth</title>
+	<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.css" />
+</head>
+<body>
+	<a href="/oauth">Connect with SmartThings</a>
+	<button onclick="onClick">Send</button>
+	<script>
+		const socket = new WebSocket('http://localhost:4567');
+		socket.onmessage = (event) => {
+			console.log(event.data);
+		}
+
+		function onClick() {
+			socket.send('Hello world!');
+		}
+	</script>
+</body>
+</html>

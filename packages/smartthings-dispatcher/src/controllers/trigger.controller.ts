@@ -23,7 +23,7 @@ export class TriggerController {
 
 	@httpGet('/event')
 	private event(@Request() req: express.Request, @Response() res: express.Response) {
-		const baseUrl = `http://graph-na04-useast2.api.smartthings.com/api/smartapps/installations/56dc81a9-b79e-4679-934d-6cd99c35200f`;
+		const baseUrl = `http://graph-na04-useast2.api.smartthings.com/api/smartapps/installations/e77e2118-d718-4738-b609-268b65c54f77`;
 		let url: string;
 
 		if (req.query['trigger_by_type'] === 'pir-motion') {
@@ -36,7 +36,7 @@ export class TriggerController {
 
 		const options: request.CoreOptions = {
 			headers: {
-				Authorization: 'Bearer e29cb2fa-7ff1-4b3d-b186-587e7b2d21f8',
+				Authorization: 'Bearer 435bcfa8-df92-4fd3-b331-81f5fef7b44f',
 				'Content-Type': 'application/json'
 			}
 		};

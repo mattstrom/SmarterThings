@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+*.js
+*.map
+
+!karma.conf.js
+!protractor.conf.js
