@@ -1,0 +1,19 @@
+<mat-toolbar color="primary">
+	<span>
+		<mat-icon style="vertical-align: text-bottom;">radio_button_unchecked</mat-icon>
+		SmartThings Security Keypad
+	</span>
+	<span>
+		<button mat-icon-button [matMenuTriggerFor]="settingsMenu">
+			<mat-icon>settings</mat-icon>
+		</button>
+	</span>
+</mat-toolbar>
+<div>
+	<router-outlet></router-outlet>
+</div>
+<mat-menu #settingsMenu="matMenu">
+	<a mat-menu-item [href]="oauthUrl">
+		<mat-icon>radio_button_unchecked</mat-icon> Connect to SmartThings
+	</a>
+</mat-menu>

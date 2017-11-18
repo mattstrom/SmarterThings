@@ -1,0 +1,10 @@
+{
+	"/oauth": {
+		"target": "http://localhost:4567",
+		"secure": false
+	},
+	"/security": {
+		"target": "http://localhost:4567",
+		"secure": false
+	}
+}

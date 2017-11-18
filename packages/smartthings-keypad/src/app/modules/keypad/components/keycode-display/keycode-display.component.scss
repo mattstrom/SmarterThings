@@ -1,0 +1,53 @@
+@import '../../../../../styles/common';
+
+:host {
+	width: 100%;
+	box-sizing: border-box;
+	padding-right: 16px;
+
+	.digits {
+		display: grid;
+		grid-template-rows: 100%;
+		grid-template-columns: 100%;
+		grid-template-areas: 'a';
+		grid-gap: 10px;
+
+		border: {
+			color: transparent;
+			style: solid;
+			width: 5px;
+		}
+
+		&.valid {
+			border-color: green;
+		}
+
+		&.invalid {
+			border-color: red;
+		}
+
+		input {
+			grid-area: 'a';
+			font-family: monospace;
+			font-size: 32pt;
+			letter-spacing: 2px;
+		}
+
+		.digit {
+			grid-row: 1;
+			grid-column: auto;
+
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+
+			margin: 0;
+			padding: 0;
+
+			color: white;
+			font-size: 32pt;
+			text-align: center;
+		}
+	}
+}

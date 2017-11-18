@@ -1,0 +1,34 @@
+@import '../styles/common';
+
+:host {
+	display: grid;
+	width: 100vw;
+	height: 100vh;
+
+	grid-template-rows: 64px auto;
+	grid-template-areas:
+		'toolbar'
+		'main';
+
+
+	background-color: #222233;
+
+	/deep/ mat-toolbar {
+		grid-area: toolbar;
+		height: 64px;
+
+		mat-toolbar-row {
+			@extend %stack-horizontal;
+			justify-content: space-between;
+			align-items: center;
+		}
+	}
+
+	mat-toolbar + div {
+		grid-area: main;
+	}
+
+	mat-menu {
+		display: none;
+	}
+}

@@ -1,0 +1,15 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %stack-vertical;
+	width: 100%;
+	height: 100%;
+
+	form {
+		@extend %stack-vertical;
+
+		mat-form-field {
+			display: block;
+		}
+	}
+}
