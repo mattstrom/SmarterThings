@@ -3,7 +3,6 @@ import { Db } from 'mongodb';
 import { inject, injectable } from 'inversify';
 import * as request from 'request';
 import {
-	BaseHttpController,
 	requestBody,
 	controller,
 	httpGet,
@@ -15,19 +14,18 @@ import {
 } from 'inversify-express-utils';
 
 import TYPES from '../di/types';
-import { WebSocketService, AuthService } from '../services';
+import { WebSocketService } from '../services';
+import { AuthService } from '../services/auth';
 
 
 @controller('/security')
 @injectable()
-export class SecuritySystemController extends BaseHttpController {
+export class SecuritySystemController {
 	@inject(TYPES.AuthService) authService: AuthService;
 	@inject(TYPES.TokenHost) smartThingsUri: string;
 	@inject(TYPES.WebSocketService) webSocketService: WebSocketService;
 
-	constructor( @inject(TYPES.MongoDB) private db: Promise<Db>) {
-		super();
-	}
+	constructor( @inject(TYPES.MongoDB) private db: Promise<Db>) {}
 
 	@httpPost('/message')
 	private async sendMessage( @requestBody() body: any, @Request() req: express.Request, @Response() res: express.Response) {

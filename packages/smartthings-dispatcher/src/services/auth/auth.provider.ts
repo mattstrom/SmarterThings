@@ -2,9 +2,9 @@ import * as express from 'express';
 import { injectable, inject } from 'inversify';
 import { interfaces } from 'inversify-express-utils';
 
-import TYPES from '../di/types';
-import { AuthService } from './index';
-import { Principal } from '../entities';
+import TYPES from '../../di/types';
+import { AuthService } from './auth.service';
+import { Principal } from '../../entities';
 
 
 @injectable()

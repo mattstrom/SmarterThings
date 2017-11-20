@@ -1,18 +1,18 @@
 import { Container, interfaces } from 'inversify';
 import { Db, MongoClient } from 'mongodb';
+import * as mongoose from 'mongoose';
 import * as Oauth2 from 'simple-oauth2';
 
-import { AuthService } from '../services';
+import { AuthModule } from '../services/auth/auth.module';
 import TYPES from './types';
 
 import Context = interfaces.Context;
+import MongooseThenable = mongoose.MongooseThenable;
 
 
 const container = new Container();
 
-//container.bind<string>(TYPES.TokenHost).toConstantValue('https://graph.api.smartthings.com');
 container.bind<string>(TYPES.TokenHost).toConstantValue('https://graph-na04-useast2.api.smartthings.com');
-container.bind<AuthService>(TYPES.AuthService).to(AuthService);
 container.bind<Oauth2.ModuleOptions>(TYPES.OAuthModuleOptions).toDynamicValue((context: Context) => {
 	return {
 		client: {
@@ -29,6 +29,16 @@ container.bind<string>(TYPES.MongoConnectionUri).toConstantValue('mongodb://loca
 container.bind<Promise<Db>>(TYPES.MongoDB).toDynamicValue((context: Context) => {
 	const uri = context.container.get<string>(TYPES.MongoConnectionUri);
 	return MongoClient.connect(uri);
-})
+});
+container.bind<MongooseThenable>(TYPES.Mongoose).toDynamicValue((context: Context) => {
+	const uri = context.container.get<string>(TYPES.MongoConnectionUri);
+
+	(<any> mongoose).Promise = global.Promise;
+	const connection = mongoose.connect(uri, { useMongoClient: true });
+
+	return connection;
+});
+
+container.load(AuthModule);
 
 export default container;

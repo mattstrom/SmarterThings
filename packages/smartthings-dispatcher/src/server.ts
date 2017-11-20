@@ -6,15 +6,25 @@ import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as hbs from 'express-handlebars';
 import * as http from 'http';
+import * as mongoose from 'mongoose';
+import * as passport from 'passport';
 import * as path from 'path';
 import * as program from 'commander';
 import * as url from 'url';
 import * as WebSocket from 'ws';
 
-import { SecuritySystemController, MainController, OAuthController, TriggerController, WildcardController } from './controllers';
+import {
+	SecuritySystemController,
+	MainController,
+	AuthController,
+	OAuthController,
+	TriggerController,
+	WildcardController
+} from './controllers';
 import container from './di/inversify.config';
 import TYPES from './di/types';
-import { WebSocketService, AuthProvider } from './services';
+import { WebSocketService } from './services';
+import { AuthProvider, AuthService } from './services/auth';
 
 
 const ROOT = path.join(path.resolve(__dirname), '..');
@@ -31,6 +41,7 @@ container.bind<string>(TYPES.ClientSecret).toConstantValue(program['clientSecret
 container.bind<WebSocketService>(TYPES.WebSocketService).to(WebSocketService).inSingletonScope();
 
 container.bind<expressInterfaces.Controller>(TYPE.Controller).to(MainController).whenTargetNamed('MainController');
+container.bind<expressInterfaces.Controller>(TYPE.Controller).to(AuthController).whenTargetNamed('AuthController');
 container.bind<expressInterfaces.Controller>(TYPE.Controller).to(OAuthController).whenTargetNamed('OAuthController');
 container.bind<expressInterfaces.Controller>(TYPE.Controller).to(SecuritySystemController).whenTargetNamed('SecuritySystemController');
 container.bind<expressInterfaces.Controller>(TYPE.Controller).to(TriggerController).whenTargetNamed('TriggerController');
@@ -63,8 +74,10 @@ const instance = server
 			next();
 		});
 
-		app.use('/lib/bootstrap', express.static(path.join(ROOT, 'node_modules/bootstrap/dist')));
+		app.use(passport.initialize());
+		app.use(passport.session());
 
+		app.use('/lib/bootstrap', express.static(path.join(ROOT, 'node_modules/bootstrap/dist')));
 	})
 	.build()
 	.listen(4567);

@@ -3,11 +3,13 @@
   "compilerOptions": {
     "outDir": "dist",
 	"inlineSourceMap": true,
-    "declaration": false,
+	"declaration": false,
+	"module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "es5",
+	"experimentalDecorators": true,
+	"skipLibCheck": true,
+    "target": "es6",
     "typeRoots": [
       "node_modules/@types"
     ],

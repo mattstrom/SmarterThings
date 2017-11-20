@@ -5,12 +5,14 @@ import { controller, httpGet, httpPost, queryParam, request, response, requestBo
 import { MongoClient, Db } from 'mongodb';
 import fetch from 'node-fetch';
 import * as Oauth2 from 'simple-oauth2';
+import * as passport from 'passport';
 
 import TYPES from '../di/types';
-import { AuthService } from '../services';
+import { authenticator } from '../middleware';
+import { AuthService } from '../services/auth';
 
 
-@controller('/oauth')
+@controller('/oauth', authenticator)
 @injectable()
 export class OAuthController {
 	private oauth: Oauth2.OAuthClient;
