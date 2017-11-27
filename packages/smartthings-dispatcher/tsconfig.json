@@ -2,8 +2,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "dist",
-	"inlineSourceMap": true,
 	"declaration": false,
+	"mapRoot": "dist",
 	"module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,

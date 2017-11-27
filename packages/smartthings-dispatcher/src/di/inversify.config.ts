@@ -12,6 +12,8 @@ import MongooseThenable = mongoose.MongooseThenable;
 
 const container = new Container();
 
+container.bind<string>(TYPES.Secret).toConstantValue('secret');
+container.bind<string>(TYPES.RedirectUrl).toConstantValue('/keypad');
 container.bind<string>(TYPES.TokenHost).toConstantValue('https://graph-na04-useast2.api.smartthings.com');
 container.bind<Oauth2.ModuleOptions>(TYPES.OAuthModuleOptions).toDynamicValue((context: Context) => {
 	return {
@@ -24,6 +26,8 @@ container.bind<Oauth2.ModuleOptions>(TYPES.OAuthModuleOptions).toDynamicValue((c
 		}
 	};
 });
+
+container.load(AuthModule);
 
 container.bind<string>(TYPES.MongoConnectionUri).toConstantValue('mongodb://localhost:27017/smartthings');
 container.bind<Promise<Db>>(TYPES.MongoDB).toDynamicValue((context: Context) => {
@@ -38,7 +42,5 @@ container.bind<MongooseThenable>(TYPES.Mongoose).toDynamicValue((context: Contex
 
 	return connection;
 });
-
-container.load(AuthModule);
 
 export default container;

@@ -11,8 +11,6 @@ import { Token } from './Token';
 import { EmailValidator } from './validators';
 
 
-const secret = container.get<string>(TYPES.Secret);
-
 @pre<User>('save', onPreSave)
 export class User extends Typegoose {
 	@prop({
@@ -39,6 +37,7 @@ export class User extends Typegoose {
 
 	@instanceMethod
 	async generateAuthToken(this: InstanceType<User>): Promise<string> {
+		const secret = container.get<string>(TYPES.Secret);
 		const user = this;
 		const access = 'auth';
 		const token = jwt.sign({
@@ -57,6 +56,7 @@ export class User extends Typegoose {
 
 	@staticMethod
 	static async findByToken(this: ModelType<User> & typeof User, token: string) {
+		const secret = container.get<string>(TYPES.Secret);
 		let decoded: object;
 
 		try {

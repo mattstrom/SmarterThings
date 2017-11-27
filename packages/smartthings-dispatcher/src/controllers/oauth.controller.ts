@@ -12,7 +12,7 @@ import { authenticator } from '../middleware';
 import { AuthService } from '../services/auth';
 
 
-@controller('/oauth', authenticator)
+@controller('/oauth')
 @injectable()
 export class OAuthController {
 	private oauth: Oauth2.OAuthClient;
@@ -52,6 +52,8 @@ export class OAuthController {
 	private async callback(@request() request: express.Request, @response() response: express.Response) {
 		const code = request.query.code;
 		const identity = request.query.state;
+
+
 
 		this.oauth.authorizationCode.getToken({
 			code: code,

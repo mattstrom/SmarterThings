@@ -6,41 +6,40 @@ import { controller, httpGet, httpPost, request, requestBody, response, interfac
 import * as passport from 'passport';
 
 import TYPES from '../di/types';
+import { NotAuthenticatedError } from '../errors';
 import { authenticator } from '../middleware';
-import { User, UserModel } from '../models';
+import { User, UserModel, Credentials } from '../models';
+import { AuthService } from '../services/auth';
 
 
 @controller('/auth')
 @injectable()
 export class AuthController {
+	@inject(TYPES.AuthService) authService: AuthService;
 
 	constructor(@inject(TYPES.Mongoose) connection: any) { }
 
 	@httpPost('/login')
 	private async login(
-		@requestBody() body: Partial<User>,
+		@requestBody() body: Credentials,
 		@response() res: express.Response
 	) {
-		const user = await UserModel.findOne({ email: body.email });
+		try {
+			const token = await this.authService.authenticateUser(body);
+			const payload = {
+				jwt: token.token,
+				expires: null
+			};
 
-		if (!user) {
-			res.status(HttpStatus.UNAUTHORIZED).send();
+
+			res.header('X-Auth', token.token)
+				.status(HttpStatus.OK)
+				.send(payload);
+		} catch (e) {
+			if (e instanceof NotAuthenticatedError) {
+				res.status(HttpStatus.UNAUTHORIZED).send();
+			}
 		}
-
-		const authenticated = await bcrypt.compare(body.password, user.password);
-
-		if (!authenticated) {
-			res.status(HttpStatus.UNAUTHORIZED).send();
-			return;
-		}
-
-		const authToken = user.tokens.find((token) => {
-			return token.access === 'auth';
-		});
-
-		res.header('X-Auth', authToken.token)
-			.status(HttpStatus.OK)
-			.send();
 	}
 
 	@httpPost('/register')

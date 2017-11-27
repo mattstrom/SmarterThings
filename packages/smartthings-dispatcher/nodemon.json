@@ -1,4 +1,5 @@
 {
+	"delay": 1000,
 	"ext": "js json",
 	"watch": [
 		"dist"

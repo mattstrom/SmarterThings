@@ -11,13 +11,11 @@ export class WildcardController {
 
 	constructor() { }
 
-	@httpGet('*')
 	@httpPost('*')
 	private wildcard( @response() res: express.Response) {
 		const pojo = { status: 404, message: 'No Content' };
 		const json = JSON.stringify(pojo, null, 2);
 
-		res.setHeader('Content-Type', 'application/json');
-		res.status(404).send(json);
+		res.status(404).render('404');
 	}
 }

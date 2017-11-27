@@ -13,28 +13,33 @@ import * as program from 'commander';
 import * as url from 'url';
 import * as WebSocket from 'ws';
 
+import container from './di/inversify.config';
+import TYPES from './di/types';
+
 import {
 	SecuritySystemController,
 	MainController,
 	AuthController,
+	FrontendController,
+	//FrontendDevController,
 	OAuthController,
 	TriggerController,
 	WildcardController
 } from './controllers';
-import container from './di/inversify.config';
-import TYPES from './di/types';
 import { WebSocketService } from './services';
-import { AuthProvider, AuthService } from './services/auth';
+import { AuthService, AuthProvider } from './services/auth';
 
 
-const ROOT = path.join(path.resolve(__dirname), '..');
+const ROOT = path.join(path.resolve(__dirname));
 
 program.version('1.0.0')
 	.usage('[options]')
+	.option('-m, --mode <mode>', 'Server Mode', 'production')
 	.option('--clientId <id>', 'Client ID')
 	.option('--clientSecret <secret>', 'Client Secret')
 	.parse(process.argv);
 
+container.bind<string>(TYPES.Mode).toConstantValue(program['mode']);
 container.bind<string>(TYPES.ClientId).toConstantValue(program['clientId']);
 container.bind<string>(TYPES.ClientSecret).toConstantValue(program['clientSecret']);
 
@@ -45,18 +50,28 @@ container.bind<expressInterfaces.Controller>(TYPE.Controller).to(AuthController)
 container.bind<expressInterfaces.Controller>(TYPE.Controller).to(OAuthController).whenTargetNamed('OAuthController');
 container.bind<expressInterfaces.Controller>(TYPE.Controller).to(SecuritySystemController).whenTargetNamed('SecuritySystemController');
 container.bind<expressInterfaces.Controller>(TYPE.Controller).to(TriggerController).whenTargetNamed('TriggerController');
-//container.bind<interfaces.Controller>(TYPE.Controller).to(WildcardController).whenTargetNamed('WildcardController');
+
+if (program['mode'] === 'development') {
+	//container.bind<expressInterfaces.Controller>(TYPE.Controller).to(FrontendDevController).whenTargetNamed('FrontendDevController');
+} else {
+	container.bind<expressInterfaces.Controller>(TYPE.Controller).to(FrontendController).whenTargetNamed('FrontendController');
+}
+
+container.bind<expressInterfaces.Controller>(TYPE.Controller).to(WildcardController).whenTargetNamed('WildcardController');
 
 const server = new InversifyExpressServer(container, null, null, null, AuthProvider);
 
 const instance = server
 	.setConfig((app: express.Application) => {
 		const options: ExphbsOptions = {
-			extname: 'hbs'
+			defaultLayout: 'master',
+			extname: 'hbs',
+			layoutsDir: path.join(ROOT, 'views/layouts'),
+			partialsDir: path.join(ROOT, 'views/partials')
 		};
 
-		app.engine('handlebars', hbs({ defaultLayout: 'index', extname: 'hbs' }));
-		app.set('view engine', 'handlebars');
+		app.engine('.hbs', hbs(options));
+		app.set('view engine', '.hbs');
 		app.set('views', path.join(ROOT, 'views'));
 
 		app.use(bodyParser.urlencoded({
@@ -69,7 +84,7 @@ const instance = server
 		app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
 			res.header('Access-Control-Allow-Origin', '*');
 			res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-			res.header('Access-Control-Allow-Headers', 'accept, content-type, x-app-key');
+			res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type');
 
 			next();
 		});
@@ -77,7 +92,8 @@ const instance = server
 		app.use(passport.initialize());
 		app.use(passport.session());
 
-		app.use('/lib/bootstrap', express.static(path.join(ROOT, 'node_modules/bootstrap/dist')));
+		app.use('/lib/bootstrap', express.static(path.join(ROOT, '../node_modules/bootstrap/dist')));
+		app.use('/public', express.static(path.join(ROOT, 'public')));
 	})
 	.build()
 	.listen(4567);

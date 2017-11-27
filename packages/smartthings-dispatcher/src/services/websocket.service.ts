@@ -5,6 +5,7 @@ import * as WebSocket from 'ws';
 
 import container from '../di/inversify.config';
 import TYPES from '../di/types';
+import { SocketModel } from '../models';
 
 
 @injectable()
@@ -35,6 +36,7 @@ export class WebSocketService {
 
 			socket.on('disconnect', () => {
 				console.log('Received message from client', event);
+				this.count -= 1;
 			});
 
 			this.count += 1;
