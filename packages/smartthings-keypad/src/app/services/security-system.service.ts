@@ -1,5 +1,5 @@
+import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
-import { Headers, Http, Response } from '@angular/http';
 import * as HttpStatus from 'http-status-codes';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -17,7 +17,7 @@ export class SecuritySystemService {
 	readonly validCode$ = new BehaviorSubject<boolean | null>(null);
 
 	constructor(
-		private http: Http,
+		private http: HttpClient,
 		private identityService: IdentityService,
 		private keycodeService: KeycodeService,
 		private webSocketService: WebSocketService,
@@ -32,14 +32,16 @@ export class SecuritySystemService {
 	}
 
 	arm() {
-		const headers = new Headers();
+		const headers = new HttpHeaders().set('Content-Type', 'application/json');
 		const payload = JSON.stringify({
 			identity: this.identityService.identity
 		});
 
-		headers.set('Content-Type', 'application/json');
-
-		this.http.put(`${this.apiUrl}/security/arm`, payload, { headers: headers })
+		this.http
+			.put(`${this.apiUrl}/security/arm`, payload, {
+				headers: headers,
+				observe: 'response'
+			})
 			.subscribe((response) => {
 				switch (response.status) {
 					case HttpStatus.NO_CONTENT: {
@@ -59,17 +61,18 @@ export class SecuritySystemService {
 			throw new RangeError();
 		}
 
-		const headers = new Headers();
+		const headers = new HttpHeaders().set('Content-Type', 'application/json');
 		const payload = JSON.stringify({
 			identity: this.identityService.identity,
 			securityCode: code
 		});
 
-		headers.set('Content-Type', 'application/json');
-
 		this.http
-			.put(`${this.apiUrl}/security/disarm`, payload, { headers: headers })
-			.subscribe((response: Response) => {
+			.put(`${this.apiUrl}/security/disarm`, payload, {
+				headers: headers,
+				observe: 'response'
+			})
+			.subscribe((response: HttpResponse<any>) => {
 				switch (response.status) {
 					case HttpStatus.NO_CONTENT: {
 						this.validCode$.next(true);
@@ -87,15 +90,13 @@ export class SecuritySystemService {
 	}
 
 	private checkStatus() {
-		const headers = new Headers();
+		const headers = new HttpHeaders().set('Content-Type', 'application/json');
 		const payload = JSON.stringify({
 			identity: this.identityService.identity
 		});
 
-		headers.set('Content-Type', 'application/json');
-
-		this.http.post(`${this.apiUrl}/security/status`, payload, { headers: headers })
-			.map((response) => response.json())
+		this.http
+			.post<any>(`${this.apiUrl}/security/status`, payload, { headers: headers })
 			.subscribe((body) => {
 				this.status$.next(body.data);
 			});

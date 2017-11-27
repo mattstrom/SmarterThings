@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
-import { Http } from '@angular/http';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { IdentityService } from '../services';
@@ -10,18 +10,24 @@ import { ApiUrlToken } from '../services/tokens';
 @Injectable()
 export class SmartThingsAuthGuard implements CanActivate {
 	constructor(
-		private http: Http,
+		private http: HttpClient,
 		private identityService: IdentityService,
+		private router: Router,
 		@Inject(ApiUrlToken) private apiUrl
 	) {}
 
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 		const identity = this.identityService.identity;
 
-		return this.http.get(`${this.apiUrl}/security/authenticated?identity=${identity}`)
-			.map((response) => response.json())
-			.map((value) => {
-				return value;
+		return this.http
+			.get<any>(`${this.apiUrl}/security/authenticated?identity=${identity}`)
+			.do((authenticated) => {
+				if (!authenticated) {
+					this.router.navigate(['connect']);
+				}
+			})
+			.map((authenticated) => {
+				return authenticated;
 			});
 	}
 }

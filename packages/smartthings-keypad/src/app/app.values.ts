@@ -1,4 +1,4 @@
-import { OpaqueToken } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
-export const SmartThingsApiToken = new OpaqueToken('SmartThingsApiToken');
-export const SmartThingsEndpoint = new OpaqueToken('SmartThingsEndpoint');
+export const SmartThingsApiToken = new InjectionToken('SmartThingsApiToken');
+export const SmartThingsEndpoint = new InjectionToken('SmartThingsEndpoint');

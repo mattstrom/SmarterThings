@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -34,7 +34,7 @@ import { SmartThingsApiToken, SmartThingsEndpoint } from '../../app.values';
 	],
 	imports: [
 		CommonModule,
-		HttpModule,
+		HttpClientModule,
 		RouterModule.forChild([
 			{
 				path: '',

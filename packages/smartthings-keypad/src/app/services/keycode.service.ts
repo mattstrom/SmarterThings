@@ -1,5 +1,4 @@
 import { Injectable, OnInit } from '@angular/core';
-import { Http, Headers } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -31,10 +30,7 @@ export class KeycodeService {
 	readonly counter$ = new Subject<number>();
 	readonly reset$ = new BehaviorSubject<void>(null);
 
-	constructor(
-		private http: Http,
-		private identityService: IdentityService
-	) {
+	constructor(private identityService: IdentityService) {
 		Observable
 			.merge(
 				this.reset$.startWith(null).mapTo(''),

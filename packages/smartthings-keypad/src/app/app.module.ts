@@ -1,5 +1,6 @@
-import { NgModule, OpaqueToken } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
 	MatButtonModule,
 	MatDialogModule,
@@ -11,35 +12,69 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppComponent } from './app.component';
-import { KeycodeService } from './services/keycode.service';
 import {
 	SmartThingsApiToken,
 	SmartThingsEndpoint
 } from './app.values';
-import { SmartThingsAuthGuard } from './guards';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { AuthGuard, SmartThingsAuthGuard } from './guards';
 import { UiComponentsModule } from './modules/ui-components/ui-components.module';
-import { IdentityService, WebSocketService, SecuritySystemService } from './services';
+import { AuthService, IdentityService, KeycodeService, WebSocketService, SecuritySystemService } from './services';
 import { ApiUrlToken, WsUrlToken } from './services/tokens';
+import { TokenInterceptor } from './services/token.interceptor';
+import { ConnectComponent } from './components/connect/connect.component';
 
 
 @NgModule({
 	declarations: [
-		AppComponent
+		AppComponent,
+		LoginComponent,
+		RegisterComponent,
+		ConnectComponent
 	],
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
-		HttpModule,
+		FormsModule,
+		HttpClientModule,
+		JwtModule.forRoot({
+			config: {
+				tokenGetter: () => {
+					return localStorage.getItem('access_token');
+				},
+				whitelistedDomains: [
+					'localhost:4200',
+					'localhost:4567'
+				]
+			}
+		}),
 		RouterModule.forRoot([
 			{
-				path: 'auth',
-				loadChildren: './modules/auth/auth.module#AuthModule'
+				path: '',
+				redirectTo: '/keypad',
+				pathMatch: 'full'
+			},
+			{
+				path: 'connect',
+				component: ConnectComponent,
+				canActivate: [AuthGuard]
+			},
+			{
+				path: 'login',
+				component: LoginComponent
+			},
+			{
+				path: 'register',
+				component: RegisterComponent
 			},
 			{
 				path: 'keypad',
 				loadChildren: './modules/keypad/keypad.module#KeypadModule',
+				canLoad: [AuthGuard],
 				canActivate: [SmartThingsAuthGuard]
 			}
 		]),
@@ -47,6 +82,8 @@ import { ApiUrlToken, WsUrlToken } from './services/tokens';
 		UiComponentsModule
 	],
 	providers: [
+		AuthGuard,
+		AuthService,
 		IdentityService,
 		KeycodeService,
 		SecuritySystemService,

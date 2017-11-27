@@ -13,15 +13,13 @@
 
 	background-color: #222233;
 
-	/deep/ mat-toolbar {
+	::ng-deep mat-toolbar {
 		grid-area: toolbar;
 		height: 64px;
 
-		mat-toolbar-row {
-			@extend %stack-horizontal;
-			justify-content: space-between;
-			align-items: center;
-		}
+		@extend %stack-horizontal;
+		justify-content: space-between;
+		align-items: center;
 	}
 
 	mat-toolbar + div {

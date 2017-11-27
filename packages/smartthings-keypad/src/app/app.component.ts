@@ -1,5 +1,5 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
-import { Headers, Http } from '@angular/http';
 
 import {
 	SmartThingsApiToken,
@@ -18,7 +18,7 @@ export class AppComponent {
 	public oauthUrl: string;
 
 	constructor(
-		private http: Http,
+		private http: HttpClient,
 		private identityService: IdentityService,
 		private webSocketService: WebSocketService,
 		@Inject(ApiUrlToken) private apiUrl: string,
@@ -36,14 +36,14 @@ export class AppComponent {
 		fetch(`${this.endpoint}/arm`, {
 			method: 'PUT',
 			headers: {
-				'Content-Type': 'application/jsonp',
+				'Content-Type': 'application/json',
 				'Authorization': `Bearer ${this.token}`
 			}
 		});
 	}
 
 	onDisarm(event) {
-		const headers = new Headers();
+		const headers = new HttpHeaders();
 		headers.set('Authorization', `Bearer ${this.token}`);
 
 			this.http.put(`${this.endpoint}/disarm`, {}, {
