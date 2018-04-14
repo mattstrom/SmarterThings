@@ -32,6 +32,8 @@ container.load(AuthModule);
 container.bind<string>(TYPES.MongoConnectionUri).toConstantValue('mongodb://localhost:27017/smartthings');
 container.bind<Promise<Db>>(TYPES.MongoDB).toDynamicValue((context: Context) => {
 	const uri = context.container.get<string>(TYPES.MongoConnectionUri);
+	(<any>mongoose).Promise = global.Promise;
+
 	return MongoClient.connect(uri);
 });
 container.bind<MongooseThenable>(TYPES.Mongoose).toDynamicValue((context: Context) => {
@@ -41,6 +43,6 @@ container.bind<MongooseThenable>(TYPES.Mongoose).toDynamicValue((context: Contex
 	const connection = mongoose.connect(uri, { useMongoClient: true });
 
 	return connection;
-});
+}).inSingletonScope();
 
 export default container;

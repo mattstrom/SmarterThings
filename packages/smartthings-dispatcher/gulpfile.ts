@@ -32,9 +32,7 @@ export class Gulpfile {
 			tsResult.js
 				.pipe(sourcemaps.write('./', {
 					includeContent: false,
-					sourceRoot: (file) => {
-						return '../'.repeat(file.relative.split('/').length) + 'src';
-					}
+					sourceRoot: '../src'
 				}))
 				.pipe(gulp.dest('./dist'))
 

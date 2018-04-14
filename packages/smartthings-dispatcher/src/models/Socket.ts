@@ -1,4 +1,4 @@
-import { Typegoose, prop } from "typegoose";
+import { Typegoose, prop } from 'typegoose';
 
 
 export class Socket extends Typegoose {
@@ -7,10 +7,13 @@ export class Socket extends Typegoose {
 	@prop({
 		required: true
 	})
-	identity: string;
+	clientId: string;
 
 	@prop()
 	connectedAt: Date;
+
+	@prop()
+	lastHeartbeat: Date;
 
 	@prop()
 	disconnectedAt: Date;

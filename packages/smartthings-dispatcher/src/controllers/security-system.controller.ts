@@ -14,6 +14,7 @@ import {
 } from 'inversify-express-utils';
 
 import TYPES from '../di/types';
+import { ServerModel } from '../models';
 import { WebSocketService } from '../services';
 import { AuthService } from '../services/auth';
 
@@ -25,7 +26,10 @@ export class SecuritySystemController {
 	@inject(TYPES.TokenHost) smartThingsUri: string;
 	@inject(TYPES.WebSocketService) webSocketService: WebSocketService;
 
-	constructor( @inject(TYPES.MongoDB) private db: Promise<Db>) {}
+	constructor(
+		@inject(TYPES.ServerId) private serverId: string,
+		@inject(TYPES.MongoDB) private db: Promise<Db>
+	) { }
 
 	@httpPost('/message')
 	private async sendMessage( @requestBody() body: any, @Request() req: express.Request, @Response() res: express.Response) {
@@ -38,6 +42,29 @@ export class SecuritySystemController {
 		} catch (e) {
 			res.sendStatus(400);
 		}
+	}
+
+	@httpPost('/status')
+	private async getStatus(@requestBody() body: boolean, @Response() res: express.Response) {
+		const clientId = body['clientId'];
+		const server = await ServerModel.findOne({
+			serverId: this.serverId
+		});
+
+		if (!server) {
+			res.sendStatus(400);
+			return;
+		}
+
+		const url = `${this.smartThingsUri}${server.token[0].accessUrl}/status`;
+		const options: request.CoreOptions = {
+			headers: {
+				Authorization: `Bearer ${server.token[0].authToken}`,
+				'Content-Type': 'application/json'
+			}
+		};
+
+		request.get(url, options).pipe(res);
 	}
 
 	@httpPut('/status')
@@ -72,63 +99,22 @@ export class SecuritySystemController {
 		}
 	}
 
-	@httpPost('/status')
-	private async getStatus(@requestBody() body: boolean, @Response() res: express.Response) {
-		const identity = body['identity'];
-		console.log(`Identity: ${identity}`);
-
-		const authToken = await this.db.then((db) =>
-			db.collection('authTokens').findOne({ identity: identity })
-		);
-
-		if (!authToken) {
-			res.sendStatus(400);
-			return;
-		}
-
-		const url = `${this.smartThingsUri}${authToken.accessUrl}/status`;
-		const options: request.CoreOptions = {
-			headers: {
-				Authorization: `Bearer ${authToken.authToken}`,
-				'Content-Type': 'application/json'
-			}
-		};
-
-		request.get(url, options).pipe(res);
-	}
-
-	@httpGet('/authenticated')
-	private async authenticated(@queryParam('identity') identity, @Response() res: express.Response) {
-		console.log(`Identity: ${identity}`);
-
-		const authTokenExists = await this.db.then((db) =>
-			db.collection('authTokens').findOne({ identity: identity })
-				.then((token) => {
-					return (token !== null && token.authToken !== null);
-				})
-		);
-
-		res.send(authTokenExists);
-	}
-
 	@httpPut('/arm')
 	private async arm(@requestBody() body: any, @Request() req: express.Request, @Response() res: express.Response) {
-		const identity = body['identity'];
-		console.log(`Identity: ${identity}`);
+		const clientId = body['clientId'];
+		const server = await ServerModel.findOne({
+			serverId: this.serverId
+		});
 
-		const authToken = await this.db.then((db) =>
-			db.collection('authTokens').findOne({ identity: identity })
-		);
-
-		if (!authToken) {
+		if (!server) {
 			res.sendStatus(400);
 			return;
 		}
 
-		const url = `${this.smartThingsUri}${authToken.accessUrl}/arm`;
+		const url = `${this.smartThingsUri}${server.token[0].accessUrl}/arm`;
 		const options: request.CoreOptions = {
 			headers: {
-				Authorization: `Bearer ${authToken.authToken}`,
+				Authorization: `Bearer ${server.token[0].authToken}`,
 				'Content-Type': 'application/json'
 			}
 		};
@@ -138,25 +124,24 @@ export class SecuritySystemController {
 
 	@httpPut('/disarm')
 	private async disarm(@requestBody() body: any, @Request() req: express.Request, @Response() res: express.Response) {
-		const identity = body['identity'];
-		console.log(`Identity: ${identity}`);
+		const clientId = body['clientId'];
+		const server = await ServerModel.findOne({
+			serverId: this.serverId
+		});
 
-		const authToken = await this.db.then((db) =>
-			db.collection('authTokens').findOne({ identity: identity })
-		);
-
-		if (!authToken) {
+		if (!server) {
 			res.sendStatus(400);
 			return;
 		}
 
-		const url = `${this.smartThingsUri}${authToken.accessUrl}/disarm`;
+		const url = `${this.smartThingsUri}${server.token[0].accessUrl}/disarm`;
 		const payload = {
 			securityCode: body['securityCode']
 		};
+
 		const options: request.CoreOptions = {
 			headers: {
-				Authorization: `Bearer ${authToken.authToken}`,
+				Authorization: `Bearer ${server.token[0].authToken}`,
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(payload)

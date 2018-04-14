@@ -21,7 +21,7 @@ import {
 	MainController,
 	AuthController,
 	FrontendController,
-	//FrontendDevController,
+	FrontendDevController,
 	OAuthController,
 	TriggerController,
 	WildcardController
@@ -34,7 +34,9 @@ const ROOT = path.join(path.resolve(__dirname));
 
 program.version('1.0.0')
 	.usage('[options]')
+	.option('-h, --hostname <hostname>', 'Hostname', 'localhost')
 	.option('-m, --mode <mode>', 'Server Mode', 'production')
+	.option('-p, --port <port>', 'Port', 4567)
 	.option('--clientId <id>', 'Client ID')
 	.option('--clientSecret <secret>', 'Client Secret')
 	.parse(process.argv);
@@ -42,6 +44,7 @@ program.version('1.0.0')
 container.bind<string>(TYPES.Mode).toConstantValue(program['mode']);
 container.bind<string>(TYPES.ClientId).toConstantValue(program['clientId']);
 container.bind<string>(TYPES.ClientSecret).toConstantValue(program['clientSecret']);
+container.bind<string>(TYPES.ServerId).toConstantValue(`${program.hostname}:${program.port}`);
 
 container.bind<WebSocketService>(TYPES.WebSocketService).to(WebSocketService).inSingletonScope();
 
@@ -52,7 +55,7 @@ container.bind<expressInterfaces.Controller>(TYPE.Controller).to(SecuritySystemC
 container.bind<expressInterfaces.Controller>(TYPE.Controller).to(TriggerController).whenTargetNamed('TriggerController');
 
 if (program['mode'] === 'development') {
-	//container.bind<expressInterfaces.Controller>(TYPE.Controller).to(FrontendDevController).whenTargetNamed('FrontendDevController');
+	container.bind<expressInterfaces.Controller>(TYPE.Controller).to(FrontendDevController).whenTargetNamed('FrontendDevController');
 } else {
 	container.bind<expressInterfaces.Controller>(TYPE.Controller).to(FrontendController).whenTargetNamed('FrontendController');
 }
@@ -94,11 +97,13 @@ const instance = server
 
 		app.use('/lib/bootstrap', express.static(path.join(ROOT, '../node_modules/bootstrap/dist')));
 		app.use('/public', express.static(path.join(ROOT, 'public')));
+
+		container.get(TYPES.Mongoose);
 	})
 	.build()
-	.listen(4567);
+	.listen(program.port);
 
 container.bind<http.Server>(TYPES.WebServer).toConstantValue(instance);
 
 const webSocketService = container.get<WebSocketService>(TYPES.WebSocketService);
-webSocketService.initialize()
+webSocketService.initialize();

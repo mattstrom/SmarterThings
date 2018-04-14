@@ -9,6 +9,7 @@ const TYPES = {
 	OAuthModuleOptions: Symbol('OAuthModuleOptions'),
 	RedirectUrl: Symbol('RedirectUrl'),
 	Secret: Symbol('Secret'),
+	ServerId: Symbol('ServerId'),
 	TokenHost: Symbol('TokenHost'),
 	WebServer: Symbol('WebServer'),
 	WebSocketService: Symbol('WebSocketService')

@@ -2,7 +2,7 @@ import * as bcrypt from 'bcryptjs';
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import { inject, injectable } from 'inversify';
-import { controller, httpGet, httpPost, request, requestBody, response, interfaces } from 'inversify-express-utils';
+import { controller, httpGet, httpPost, request, requestBody, response, interfaces, queryParam } from 'inversify-express-utils';
 import * as passport from 'passport';
 
 import TYPES from '../di/types';
@@ -17,7 +17,7 @@ import { AuthService } from '../services/auth';
 export class AuthController {
 	@inject(TYPES.AuthService) authService: AuthService;
 
-	constructor(@inject(TYPES.Mongoose) connection: any) { }
+	constructor() { }
 
 	@httpPost('/login')
 	private async login(
@@ -64,5 +64,6 @@ export class AuthController {
 	@httpGet('/me', authenticator)
 	private async me(@requestBody() body: User, @response() res: express.Response) {
 		res.status(HttpStatus.OK).send();
+		return await Promise.resolve();
 	}
 }

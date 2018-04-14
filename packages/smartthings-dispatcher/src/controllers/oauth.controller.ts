@@ -1,20 +1,24 @@
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import { inject, injectable } from 'inversify';
-import { controller, httpGet, httpPost, queryParam, request, response, requestBody } from 'inversify-express-utils';
+import { controller, cookies, httpGet, httpPost, queryParam, request, response, requestBody } from 'inversify-express-utils';
 import { MongoClient, Db } from 'mongodb';
 import fetch from 'node-fetch';
 import * as Oauth2 from 'simple-oauth2';
 import * as passport from 'passport';
+import * as util from 'util';
 
 import TYPES from '../di/types';
 import { authenticator } from '../middleware';
+import { ServerModel, SmartThingsToken } from '../models';
 import { AuthService } from '../services/auth';
 
 
 @controller('/oauth')
 @injectable()
 export class OAuthController {
+	@inject(TYPES.ServerId) serverId: string;
+
 	private oauth: Oauth2.OAuthClient;
 
 	private endpointsUri: string = 'https://graph.api.smartthings.com/api/smartapps/endpoints';
@@ -31,80 +35,126 @@ export class OAuthController {
 	}
 
 	@httpGet('/')
-	private async index(@queryParam('entryUrl') entryUrl, @request() request: express.Request, @response() response: express.Response) {
-		const identity = request.cookies['identity'];
+	private async index(
+		@queryParam('deviceId') deviceId,
+		@queryParam('entry') entryUrl,
+		@request() req: express.Request,
+		@response() res: express.Response
+	) {
+		const clientId = req.cookies['clientId'];
 		const authorizationUri = this.oauth.authorizationCode.authorizeURL({
 			redirect_uri: this.redirectUri,
 			scope: 'app',
-			state: identity
+			state: clientId
 		});
 
-		this.entryUrls.set(identity, entryUrl);
+		this.entryUrls.set(clientId, entryUrl);
 
-		await this.db.then((db) =>
-			db.collection('authTokens').insertOne({ identity: identity })
-		);
+		let server = await ServerModel.findOne({
+			serverId: this.serverId
+		});
 
-		response.redirect(authorizationUri);
+		if (!server) {
+			server = new ServerModel({
+				serverId: this.serverId,
+				connected: false
+			});
+		}
+
+		if (!server.clients.includes(clientId)) {
+			server.clients.push(clientId);
+		}
+
+		await server.save();
+
+		res.redirect(authorizationUri);
+	}
+
+	@httpGet('/disconnect')
+	private async disconnect(
+		@cookies('clientId') clientId,
+		@request() req: express.Request,
+		@response() res: express.Response
+	) {
+		const server = await ServerModel.findOne({
+			serverId: this.serverId
+		});
+
+		if (server) {
+			try {
+				await server.remove();
+
+				res.status(HttpStatus.OK)
+					.send();
+			} catch (e) {
+				res.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.send();
+			}
+		}
 	}
 
 	@httpGet('/callback')
-	private async callback(@request() request: express.Request, @response() response: express.Response) {
-		const code = request.query.code;
-		const identity = request.query.state;
+	private async callback(@request() req: express.Request, @response() res: express.Response) {
+		if (req.query.error) {
+			switch (req.query.error) {
+				case 'access_denied': {
+					res.send(HttpStatus.FORBIDDEN);
+					return;
+				}
+				default:
+					res.send(HttpStatus.INTERNAL_SERVER_ERROR);
+					return;
+			}
+		}
 
+		const code = req.query.code;
+		const clientId = req.query.state;
 
-
-		this.oauth.authorizationCode.getToken({
-			code: code,
-			redirect_uri: this.redirectUri
-		}, saveToken.bind(this));
-
-		function saveToken(error, result) {
-			if (error) { console.log('Access Token Error', error.message); }
+		try {
+			const result = await this.oauth.authorizationCode.getToken({
+				code: code,
+				redirect_uri: this.redirectUri
+			});
 
 			// result.access_token is the token, get the endpoint
 			const bearer = result.access_token;
 			const url = `${this.endpointsUri}?access_token=${result.access_token}`;
 
-			fetch(url, { method: 'GET' })
-				.then((res) => res.json())
-				.then((body) => {
-					const endpoints = body;
-					const accessUrl = endpoints[0].url;
+			const endpoints = await fetch(url, { method: 'GET' })
+				.then((res) => res.json());
 
-					return this.db.then(async (db: Db) => {
-						const item = await db.collection('authTokens')
-							.update({ identity: identity }, {
-								$set: {
-									accessUrl: accessUrl,
-									authToken: bearer
-								}
-							});
+			const accessUrl = endpoints[0].url;
 
-						this.authService.set(bearer);
-					})
-					.then(() => body);
-				})
-				.then((body) => {
-					const entryUrl = this.entryUrls.get(identity);
+			const server = await ServerModel.findOne({
+				serverId: this.serverId
+			});
 
-					if (entryUrl) {
-						response.redirect(entryUrl);
-					} else {
-						const endpoints = body;
-						// we just show the final access URL and Bearer code
-						const access_url = endpoints[0].url;
+			const token = new SmartThingsToken();
+			token.accessUrl = accessUrl;
+			token.authToken = bearer;
 
-						const html = `
-							<pre>https://graph.api.smartthings.com/${access_url}</pre>
-							<br>
-							<pre>Bearer ${bearer}</pre>
-						`;
+			await server.update({
+				connected: true,
+				token: [token]
+			});
 
-						response.send(html);
-					}
-				});
+			//this.authService.set(bearer);
+
+			const entryUrl = this.entryUrls.get(clientId);
+
+			if (entryUrl) {
+				res.redirect(entryUrl);
+			} else {
+				const html = `
+					<pre>https://graph.api.smartthings.com/${accessUrl}</pre>
+					<br>
+					<pre>Bearer ${bearer}</pre>
+				`;
+
+				res.send(html);
+			}
+		} catch (e) {
+			console.error('Access Token Error', e.message);
 		}
 	}
 
@@ -126,5 +176,21 @@ export class OAuthController {
 		} else {
 			res.sendStatus(HttpStatus.OK)
 		}
+	}
+
+	/**
+	 * Reports whether server has been connected to a SmartThings hub.
+	 *
+	 * @param res
+	 */
+	@httpGet('/connected')
+	private async connected(@response() res: express.Response) {
+		const servers = await ServerModel.count({
+			serverId: this.serverId,
+			connected: true
+		});
+		const connected = (servers !== 0);
+
+		res.send(connected);
 	}
 }
