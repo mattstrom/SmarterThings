@@ -17,17 +17,12 @@ export class SmartThingsAuthGuard implements CanActivate {
 	) {}
 
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-		const identity = this.identityService.identity;
-
 		return this.http
-			.get<any>(`${this.apiUrl}/security/authenticated?identity=${identity}`)
+			.get<any>(`${this.apiUrl}/oauth/connected`)
 			.do((authenticated) => {
 				if (!authenticated) {
 					this.router.navigate(['connect']);
 				}
-			})
-			.map((authenticated) => {
-				return authenticated;
 			});
 	}
 }

@@ -4,13 +4,13 @@ import * as uuid from 'uuid';
 
 @Injectable()
 export class IdentityService {
-	get identity() {
-		return Cookies.get('identity');
+	get clientId() {
+		return Cookies.get('clientId');
 	}
 
 	constructor() {
-		if (!this.identity) {
-			Cookies.set('identity', uuid.v4());
+		if (!this.clientId) {
+			Cookies.set('clientId', uuid.v4());
 		}
 	}
 }

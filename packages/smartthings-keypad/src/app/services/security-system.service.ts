@@ -25,7 +25,7 @@ export class SecuritySystemService {
 	) {
 		this.checkStatus();
 
-		this.webSocketService.socket
+		this.webSocketService.message$
 			.subscribe((message) => {
 				this.handleMessage(message);
 			});
@@ -34,7 +34,7 @@ export class SecuritySystemService {
 	arm() {
 		const headers = new HttpHeaders().set('Content-Type', 'application/json');
 		const payload = JSON.stringify({
-			identity: this.identityService.identity
+			clientId: this.identityService.clientId
 		});
 
 		this.http
@@ -63,7 +63,7 @@ export class SecuritySystemService {
 
 		const headers = new HttpHeaders().set('Content-Type', 'application/json');
 		const payload = JSON.stringify({
-			identity: this.identityService.identity,
+			clientId: this.identityService.clientId,
 			securityCode: code
 		});
 
@@ -92,7 +92,7 @@ export class SecuritySystemService {
 	private checkStatus() {
 		const headers = new HttpHeaders().set('Content-Type', 'application/json');
 		const payload = JSON.stringify({
-			identity: this.identityService.identity
+			clientId: this.identityService.clientId
 		});
 
 		this.http

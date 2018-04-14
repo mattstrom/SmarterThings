@@ -1,16 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 
 import {
 	SmartThingsApiToken,
 	SmartThingsEndpoint
 } from './app.values';
-import { IdentityService, WebSocketService } from './services';
+import { AuthService, IdentityService, WebSocketService } from './services';
 import { ApiUrlToken } from './services/tokens';
 
 
 @Component({
-	selector: 'app',
+	selector: 'st-app',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss']
 })
@@ -18,36 +19,17 @@ export class AppComponent {
 	public oauthUrl: string;
 
 	constructor(
-		private http: HttpClient,
-		private identityService: IdentityService,
-		private webSocketService: WebSocketService,
-		@Inject(ApiUrlToken) private apiUrl: string,
-		@Inject(SmartThingsApiToken) private token: string,
-		@Inject(SmartThingsEndpoint) private endpoint: string
+		private authService: AuthService,
+		private router: Router,
+		private webSocketService: WebSocketService
 	) {
-		this.oauthUrl = `${this.apiUrl}/oauth?entry=${location.href}`;
-
-		webSocketService.socket.subscribe((data) => {
+		webSocketService.message$.subscribe((data) => {
 			console.log(data);
 		});
 	}
 
-	onArm(event) {
-		fetch(`${this.endpoint}/arm`, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${this.token}`
-			}
-		});
+	onLogout() {
+		this.authService.logout();
+		this.router.navigate(['/login']);
 	}
-
-	onDisarm(event) {
-		const headers = new HttpHeaders();
-		headers.set('Authorization', `Bearer ${this.token}`);
-
-			this.http.put(`${this.endpoint}/disarm`, {}, {
-				headers: headers
-			}).subscribe();
-		}
 }

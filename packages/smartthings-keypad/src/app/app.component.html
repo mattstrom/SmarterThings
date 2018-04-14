@@ -16,4 +16,8 @@
 	<a mat-menu-item [href]="oauthUrl">
 		<mat-icon>radio_button_unchecked</mat-icon> Connect to SmartThings
 	</a>
+	<a mat-menu-item (click)="onLogout()">
+		<mat-icon>logout</mat-icon>
+		Logout
+	</a>
 </mat-menu>
