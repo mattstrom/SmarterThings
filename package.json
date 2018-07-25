@@ -4,7 +4,10 @@
   "description": "Solution containing various SmartThings projects",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compose:build": "docker-compose --file=docker-compose.yml build",
+    "compose:up": "docker-compose --file=docker-compose.yml up",
+    "compose:down": "docker-compose --file=docker-compose.yml down"
   },
   "repository": {
     "type": "git",
@@ -14,5 +17,8 @@
   "license": "ISC",
   "devDependencies": {
     "lerna": "^2.4.0"
+  },
+  "dependencies": {
+    "@angular/cli": "^6.0.8"
   }
 }

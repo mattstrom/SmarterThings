@@ -8,7 +8,7 @@ import * as Oauth2 from 'simple-oauth2';
 import * as passport from 'passport';
 import * as util from 'util';
 
-import TYPES from '../di/types';
+import { default as TYPES, OAuthTypes } from '../di/types';
 import { authenticator } from '../middleware';
 import { ServerModel, SmartThingsToken } from '../models';
 import { AuthService } from '../services/auth';
@@ -20,15 +20,13 @@ export class OAuthController {
 	@inject(TYPES.ServerId) serverId: string;
 
 	private oauth: Oauth2.OAuthClient;
-
-	private endpointsUri: string = 'https://graph.api.smartthings.com/api/smartapps/endpoints';
-	private redirectUri: string = 'http://home.mattstrom.com:4567/oauth/callback';
-
 	private entryUrls = new Map<string, string>();
 
 	constructor(
 		@inject(TYPES.AuthService) private authService: AuthService,
 		@inject(TYPES.MongoDB) private db: Promise<Db>,
+		@inject(OAuthTypes.OAuthEndpointUrl) private endpointUrl: string,
+		@inject(OAuthTypes.OAuthRedirectUrl) private redirectUrl: string,
 		@inject(TYPES.OAuthModuleOptions) private options: Oauth2.ModuleOptions
 	) {
 		this.oauth = Oauth2.create(options);
@@ -43,7 +41,7 @@ export class OAuthController {
 	) {
 		const clientId = req.cookies['clientId'];
 		const authorizationUri = this.oauth.authorizationCode.authorizeURL({
-			redirect_uri: this.redirectUri,
+			redirect_uri: this.redirectUrl,
 			scope: 'app',
 			state: clientId
 		});
@@ -113,12 +111,12 @@ export class OAuthController {
 		try {
 			const result = await this.oauth.authorizationCode.getToken({
 				code: code,
-				redirect_uri: this.redirectUri
+				redirect_uri: this.redirectUrl
 			});
 
 			// result.access_token is the token, get the endpoint
 			const bearer = result.access_token;
-			const url = `${this.endpointsUri}?access_token=${result.access_token}`;
+			const url = `${this.endpointUrl}?access_token=${result.access_token}`;
 
 			const endpoints = await fetch(url, { method: 'GET' })
 				.then((res) => res.json());

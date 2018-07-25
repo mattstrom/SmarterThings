@@ -1,0 +1,5 @@
+<button mat-fab color="primary"
+	[class.active]="pressed$ | async"
+	(click)="onClick($event)">
+	{{ action }}
+</button>

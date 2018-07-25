@@ -10,6 +10,7 @@ import * as mongoose from 'mongoose';
 import * as passport from 'passport';
 import * as path from 'path';
 import * as program from 'commander';
+import * as swagger from 'swagger-express-ts';
 import * as url from 'url';
 import * as WebSocket from 'ws';
 
@@ -35,12 +36,14 @@ const ROOT = path.join(path.resolve(__dirname));
 program.version('1.0.0')
 	.usage('[options]')
 	.option('-h, --hostname <hostname>', 'Hostname', 'localhost')
+	.option('-d, --dbHost <hostname>', 'Database Hostname', 'localhost')
 	.option('-m, --mode <mode>', 'Server Mode', 'production')
 	.option('-p, --port <port>', 'Port', 4567)
 	.option('--clientId <id>', 'Client ID')
 	.option('--clientSecret <secret>', 'Client Secret')
 	.parse(process.argv);
 
+container.bind<string>(TYPES.MongoHost).toConstantValue(program['dbHost']);
 container.bind<string>(TYPES.Mode).toConstantValue(program['mode']);
 container.bind<string>(TYPES.ClientId).toConstantValue(program['clientId']);
 container.bind<string>(TYPES.ClientSecret).toConstantValue(program['clientSecret']);
@@ -84,6 +87,23 @@ const instance = server
 		app.use(bodyParser.json());
 		app.use(cookieParser());
 
+		app.use('/api-docs/swagger', express.static('swagger') );
+		app.use('/api-docs/swagger/assets', express.static('node_modules/swagger-ui-dist'));
+		app.use(swagger.express(
+			{
+				definition: {
+					info: {
+						title: "My api",
+						version: "1.0"
+					} ,
+					externalDocs: {
+						url : "My url"
+					}
+					// Models can be defined here
+				}
+			}
+		));
+
 		app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
 			res.header('Access-Control-Allow-Origin', '*');
 			res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -107,3 +127,7 @@ container.bind<http.Server>(TYPES.WebServer).toConstantValue(instance);
 
 const webSocketService = container.get<WebSocketService>(TYPES.WebSocketService);
 webSocketService.initialize();
+
+// https://graph.api.smartthings.com//api/smartapps/installations/ece35369-9fb1-4554-8ea9-bcd5fdbd1120
+
+// Bearer 6919d799-478c-49a8-829b-c48f8cdcb3a9

@@ -19,7 +19,9 @@ export class WebSocketService {
 	initialize() {
 		const server = container.get<http.Server>(TYPES.WebServer);
 
-		this.io = socketIo(server);
+		this.io = socketIo(server, {
+			path: '/ws'
+		});
 
 		this.io.on('connect', (socket: any) => {
 			console.log('Connected client');

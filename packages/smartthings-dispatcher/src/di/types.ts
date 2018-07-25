@@ -3,6 +3,7 @@ const TYPES = {
 	ClientId: Symbol('ClientId'),
 	ClientSecret: Symbol('ClientSecret'),
 	Mode: Symbol('Mode'),
+	MongoHost: Symbol('MongoHost'),
 	MongoConnectionUri: Symbol('MongoConnectionUri'),
 	MongoDB: Symbol('MongoDB'),
 	Mongoose: Symbol('Mongoose'),
@@ -13,6 +14,12 @@ const TYPES = {
 	TokenHost: Symbol('TokenHost'),
 	WebServer: Symbol('WebServer'),
 	WebSocketService: Symbol('WebSocketService')
+};
+
+export const OAuthTypes = {
+	OAuthEndpointUrl: Symbol('OAuthEndpointUrl'),
+	OAuthModuleOptions: Symbol('OAuthModuleOptions'),
+	OAuthRedirectUrl: Symbol('OAuthRedirectUrl')
 };
 
 export default TYPES;

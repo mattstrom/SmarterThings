@@ -3,20 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
-  "config": {
-    "clientId": "b92dcaae-8905-4982-a40f-fc15b6bcec37",
-    "clientSecret": "a14c2f34-300d-4956-b8c3-331716deab6d"
-  },
   "scripts": {
     "prestart": "npm run build",
     "start": "npm run server",
-    "server": "nodemon dist/server.js --clientId $npm_package_config_clientId --clientSecret $npm_package_config_clientSecret",
+    "server": "nodemon dist/server.js --clientId $npm_config_clientId --clientSecret $npm_config_clientSecret",
     "prebuild": "rimraf dist",
     "build": "gulp build",
     "predev": "npm run build",
     "dev": "concurrently \"npm run watch\" \"npm run server\"",
     "watch": "gulp watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "swagger-gen": "tsoa swagger",
+    "docker:build": "docker build ."
   },
   "author": "",
   "license": "ISC",
@@ -51,6 +49,7 @@
     "request": "^2.81.0",
     "simple-oauth2": "^1.3.0",
     "socket.io": "^2.1.0",
+    "swagger-express-ts": "^1.0.0-rc.3",
     "typegoose": "^3.6.0",
     "validator": "^9.1.1",
     "ws": "^3.2.0"

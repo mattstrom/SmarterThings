@@ -1,0 +1,25 @@
+@import '../../../../../styles/common';
+
+:host {
+	display: grid;
+	width: 100%;
+	height: 100%;
+	grid-template-rows: 100%;
+	grid-template-columns: 50% 50%;
+	grid-template-areas: "left right";
+
+	.status-icon {
+		grid-area: left;
+		align-self: center;
+
+		mat-icon {
+			font-size: 32px;
+		}
+	}
+
+	.countdown {
+		grid-area: right;
+		align-self: center;
+	}
+
+}

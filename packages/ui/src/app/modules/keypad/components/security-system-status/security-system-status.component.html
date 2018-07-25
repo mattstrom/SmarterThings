@@ -1,0 +1,8 @@
+<div class="status-icon" [ngSwitch]="status$ | async">
+	<mat-icon *ngSwitchCase="'armed'">lock_outline</mat-icon>
+	<mat-icon *ngSwitchCase="'disarmed'">lock_open</mat-icon>
+	<mat-icon *ngSwitchCase="'unknown'">report_problem</mat-icon>
+</div>
+<div class="countdown">
+	<countdown></countdown>
+</div>

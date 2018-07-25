@@ -1,0 +1,14 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %stack-vertical;
+	align-items: flex-start;
+
+	& > div {
+
+
+		button {
+			@extend %flex-no-grow;
+		}
+	}
+}

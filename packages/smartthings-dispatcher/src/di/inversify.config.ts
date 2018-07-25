@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose';
 import * as Oauth2 from 'simple-oauth2';
 
 import { AuthModule } from '../services/auth/auth.module';
+import { OAuthModule } from './oauth.module';
 import TYPES from './types';
 
 import Context = interfaces.Context;
@@ -28,8 +29,12 @@ container.bind<Oauth2.ModuleOptions>(TYPES.OAuthModuleOptions).toDynamicValue((c
 });
 
 container.load(AuthModule);
+container.load(OAuthModule);
 
-container.bind<string>(TYPES.MongoConnectionUri).toConstantValue('mongodb://localhost:27017/smartthings');
+container.bind<string>(TYPES.MongoConnectionUri).toDynamicValue((context: Context) => {
+	const host = container.get<string>(TYPES.MongoHost);
+	return `mongodb://${host}:27017/smartthings`;
+});
 container.bind<Promise<Db>>(TYPES.MongoDB).toDynamicValue((context: Context) => {
 	const uri = context.container.get<string>(TYPES.MongoConnectionUri);
 	(<any>mongoose).Promise = global.Promise;

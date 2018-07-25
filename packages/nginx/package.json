@@ -1,0 +1,15 @@
+{
+  "name": "@mattstrom/smartthings-nginx",
+  "version": "1.0.0",
+  "license": "MIT",
+  "config": {
+    "dockerTag": "docker_nginx"
+  },
+  "scripts": {
+    "start": "docker run -p 80:80 -p 443:443 -it $npm_package_config_dockerTag",
+    "docker:build": "docker build -t $npm_package_config_dockerTag ."
+  },
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {}
+}
