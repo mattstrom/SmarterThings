@@ -1,9 +1,10 @@
+require('dotenv').config();
+
 import './polyfills';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
-import * as express from 'express';
 
 import { AppModule } from './app.module';
 
@@ -19,7 +20,7 @@ async function bootstrap() {
 
 	const document = SwaggerModule.createDocument(app, options);
 
-	SwaggerModule.setup('api', app, document);
+	SwaggerModule.setup('docs', app, document);
 
 	app.use(cookieParser());
 	app.useGlobalPipes(new ValidationPipe());

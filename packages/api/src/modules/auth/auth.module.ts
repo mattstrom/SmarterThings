@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 
+import { EndpointUrl, OauthModuleOptions, RedirectUrl, SecretKey, ServerId } from '../../types';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { OauthController } from './oauth.controller';
-import { EndpointUrl, OauthModuleOptions, RedirectUrl, SecretKey, ServerId } from '../types';
+
 
 @Module({
 	controllers: [
@@ -13,10 +14,10 @@ import { EndpointUrl, OauthModuleOptions, RedirectUrl, SecretKey, ServerId } fro
 	],
 	providers: [
 		AuthService,
-		{ provide: EndpointUrl, useValue: 'https://graph.api.smartthings.com/api/smartapps/endpoints' },
-		{ provide: RedirectUrl, useValue: 'http://home.mattstrom.com/oauth/callback' },
-		{ provide: SecretKey, useValue: 'secretKey' },
-		{ provide: ServerId, useValue: 'http://localhost' },
+		{ provide: EndpointUrl, useValue: process.env.ENDPOINT_URL },
+		{ provide: RedirectUrl, useValue: `${process.env.API_URL}/oauth/callback` },
+		{ provide: SecretKey, useValue: process.env.JWT_SECRET },
+		{ provide: ServerId, useValue: process.env.SERVER_ID },
 		{
 			provide: JwtStrategy,
 			inject: [AuthService, SecretKey],
@@ -26,11 +27,11 @@ import { EndpointUrl, OauthModuleOptions, RedirectUrl, SecretKey, ServerId } fro
 			provide: OauthModuleOptions,
 			useValue: {
 				client: {
-					id: 'b92dcaae-8905-4982-a40f-fc15b6bcec37',
-					secret: 'a14c2f34-300d-4956-b8c3-331716deab6d'
+					id: process.env.SMARTTHINGS_CLIENT_ID,
+					secret: process.env.SMARTTHINGS_CLIENT_SECRET
 				},
 				auth: {
-					tokenHost: 'https://graph-na04-useast2.api.smartthings.com'
+					tokenHost: process.env.SMARTTHINGS_TOKEN_HOST
 				}
 			}
 		}

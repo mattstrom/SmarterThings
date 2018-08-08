@@ -4,8 +4,8 @@ import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { MongoEntityManager } from 'typeorm';
 
-import { Credentials, User } from '../entities';
-import { SecretKey } from '../types';
+import { Credentials, User } from '../../entities';
+import { SecretKey } from '../../types';
 import { JwtPayload } from './jwt.strategy';
 
 

@@ -2,9 +2,6 @@ FROM node:10.5.0 AS build
 
 MAINTAINER Matt Strom [matt@mattstrom.com]
 
-ARG SMARTTHINGS_CLIENT_ID
-ARG SMARTTHINGS_CLIENT_SECRET
-
 ADD package.json /tmp/package.json
 RUN cd /tmp && npm install
 RUN mkdir -p /build && cp -a /tmp/node_modules /build
@@ -14,9 +11,7 @@ ADD . /build
 
 RUN \
 	npm install && \
-	npm run build && \
-	npm config set clientId ${SMARTTHINGS_CLIENT_ID} && \
-	npm config set clientSecret ${SMARTTHINGS_CLIENT_SECRET}
+	npm run build
 
 
 FROM node:10.5.0-alpine

@@ -1,10 +1,9 @@
-import { Body, Controller, Post, Response } from '@nestjs/common';
+import { Body, Controller, Post, Response, UnauthorizedException } from '@nestjs/common';
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 
-import { Credentials } from '../entities';
+import { Credentials } from '../../entities';
 import { AuthService } from './auth.service';
-import { NotAuthenticatedError } from './not-authenticated.error';
 
 
 @Controller('auth')
@@ -25,9 +24,11 @@ export class AuthController {
 				.type('text/text')
 				.send(token);
 		} catch (e) {
-			if (e instanceof NotAuthenticatedError) {
+			if (e instanceof UnauthorizedException) {
 				res.status(HttpStatus.UNAUTHORIZED).send();
 			}
+
+			throw e;
 		}
 	}
 

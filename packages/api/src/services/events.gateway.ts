@@ -1,6 +1,5 @@
 import { SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse, NestGateway } from '@nestjs/websockets';
-import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+
 
 @WebSocketGateway({ path: '/ws' })
 export class EventsGateway implements NestGateway {

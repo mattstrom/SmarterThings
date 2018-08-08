@@ -1,22 +1,24 @@
 import { Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
-import { AuthModule } from './auth/auth.module';
-import { TriggerController } from './controllers/trigger.controller';
-import { SecuritySystemController } from './controllers/security-system.controller';
-import { EventsGateway } from './services/events.gateway';
+import { SecuritySystemController, TriggerController } from './controllers';
+import { AuthModule } from './modules/auth';
+import { LoggingModule, MorganInterceptor } from './modules/logging';
+import { EventsGateway } from './services';
 import { ServerId, RedirectUrl, SmartThingsAppUrl } from './types';
 
 
 @Module({
 	controllers: [
 		AppController,
-		TriggerController,
-		SecuritySystemController
+		SecuritySystemController,
+		TriggerController
 	],
 	imports: [
 		AuthModule,
+		LoggingModule.forRoot(),
 		TypeOrmModule.forRoot({
 			type: 'mongodb',
 			host: process.env.TYPEORM_HOST || 'localhost',
@@ -30,11 +32,15 @@ import { ServerId, RedirectUrl, SmartThingsAppUrl } from './types';
 	],
 	providers: [
 		EventsGateway,
-		{ provide: RedirectUrl, useValue: '/keypad' },
-		{ provide: ServerId, useValue: 'http://localhost' },
+		{ provide: RedirectUrl, useValue: process.env.REDIRECT_URL },
+		{ provide: ServerId, useValue: process.env.SERVER_ID },
 		{
 			provide: SmartThingsAppUrl,
-			useValue: 'http://graph-na04-useast2.api.smartthings.com/api/smartapps/installations/e77e2118-d718-4738-b609-268b65c54f77'
+			useValue: process.env.SMARTTHINGS_TOKEN_HOST
+		},
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: MorganInterceptor,
 		}
 	]
 })

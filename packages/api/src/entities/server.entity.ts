@@ -12,8 +12,8 @@ export class Server {
 	@Column({ default: false })
 	connected: boolean;
 
-	@Column({ default: [] })
-	token: SmartThingsToken[];
+	@Column()
+	token: SmartThingsToken;
 
 	@Column({ default: [] })
 	clients: string[] = [];
