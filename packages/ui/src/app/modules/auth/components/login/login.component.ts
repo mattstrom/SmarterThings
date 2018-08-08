@@ -37,12 +37,17 @@ export class LoginComponent implements OnInit {
 		this.authenticating.next(true);
 		this.authService.login(this.model.credentials)
 			.pipe(take(1))
-			.subscribe((authenticated: boolean) => {
-				this.authenticating.next(false);
+			.subscribe(
+				(authenticated: boolean) => {
+					this.authenticating.next(false);
 
-				if (authenticated) {
-					this.router.navigateByUrl(this.redirectUrl);
+					if (authenticated) {
+						this.router.navigateByUrl(this.redirectUrl);
+					}
+				},
+				(err) => {
+					this.authenticating.next(false);
 				}
-			});
+			);
 	}
 }

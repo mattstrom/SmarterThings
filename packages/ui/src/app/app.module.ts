@@ -1,4 +1,3 @@
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,8 +13,9 @@ import {
 	ConnectComponent,
 	LoginComponent,
 	RegisterComponent,
-	SmartThingsAuthGuard, TokenInterceptor
+	SmartThingsAuthGuard
 } from './modules/auth';
+import { WebSocketService } from './modules/keypad/services';
 import { UiComponentsModule } from './modules/ui-components';
 import { IdentityService } from './services';
 import { ApiUrlToken, SmartThingsApiToken, SmartThingsEndpoint, WsUrlToken } from './tokens';
@@ -75,6 +75,7 @@ import { ApiUrlToken, SmartThingsApiToken, SmartThingsEndpoint, WsUrlToken } fro
 	],
 	providers: [
 		IdentityService,
+		WebSocketService,
 		{
 			provide: ApiUrlToken,
 			useValue: environment.apiUrl
@@ -90,11 +91,6 @@ import { ApiUrlToken, SmartThingsApiToken, SmartThingsEndpoint, WsUrlToken } fro
 		{
 			provide: WsUrlToken,
 			useValue: environment.wsUrl
-		},
-		{
-			provide: HTTP_INTERCEPTORS,
-			useClass: TokenInterceptor,
-			multi: true
 		}
 	],
 	bootstrap: [AppComponent]

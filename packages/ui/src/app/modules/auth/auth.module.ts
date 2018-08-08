@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { UiComponentsModule } from '../ui-components';
 import { ConnectComponent, LoginComponent, RegisterComponent } from './components';
 import { AuthGuard, SmartThingsAuthGuard } from './guards';
+import { TokenInterceptor } from './index';
 import { AuthService } from './services';
 
 
@@ -29,7 +30,12 @@ import { AuthService } from './services';
 	providers: [
 		AuthGuard,
 		AuthService,
-		SmartThingsAuthGuard
+		SmartThingsAuthGuard,
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: TokenInterceptor,
+			multi: true
+		}
 	]
 })
 export class AuthModule {}

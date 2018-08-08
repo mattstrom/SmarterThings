@@ -1,14 +1,10 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { SwUpdate } from '@angular/service-worker';
 
-// import {
-// 	SmartThingsApiToken,
-// 	SmartThingsEndpoint
-// } from './app.values';
 import { AuthService } from './modules/auth/services';
+import { WebSocketService } from './modules/keypad/services';
 import { IdentityService } from './services';
-// import { IdentityService, WebSocketService } from './services';
-// import { ApiUrlToken } from './services/tokens';
 
 
 @Component({
@@ -23,11 +19,17 @@ export class AppComponent {
 		private authService: AuthService,
 		private identityService: IdentityService,
 		private router: Router,
-		// private webSocketService: WebSocketService
+		private updates: SwUpdate,
+		private webSocketService: WebSocketService
 	) {
-		// webSocketService.message$.subscribe((data) => {
-		// 	console.log(data);
-		// });
+		this.updates.available.subscribe(async event => {
+			await this.updates.activateUpdate();
+			location.reload();
+		});
+
+		webSocketService.message$.subscribe((data) => {
+			console.log(data);
+		});
 	}
 
 	onLogout() {

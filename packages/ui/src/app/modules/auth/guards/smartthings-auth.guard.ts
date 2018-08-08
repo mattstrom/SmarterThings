@@ -1,8 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import * as HttpStatus from 'http-status-codes';
+import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 import { ApiUrlToken } from '../../../tokens';
 
@@ -17,12 +18,20 @@ export class SmartThingsAuthGuard implements CanActivate {
 
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 		return this.http
-			.get<any>(`${this.apiUrl}/oauth/connected`)
+			.get<boolean>(`${this.apiUrl}/oauth/connected`)
 			.pipe(
-				tap((authenticated) => {
-					if (!authenticated) {
+				tap(connected => {
+					if (!connected) {
 						this.router.navigate(['connect']);
 					}
+				}),
+				catchError((err: HttpErrorResponse) => {
+					if (err.status === HttpStatus.UNAUTHORIZED) {
+						this.router.navigate(['login']);
+						return of(false);
+					}
+
+					throw err;
 				})
 			);
 	}

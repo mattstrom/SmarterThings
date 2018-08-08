@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { TokenInterceptor } from '../auth';
 
 import { IdentityService, KeycodeService, SecuritySystemService, WebSocketService } from './services';
 import { UiComponentsModule } from '../ui-components';
@@ -40,7 +41,12 @@ import { SecuritySystemStatusComponent } from './components/security-system-stat
 		IdentityService,
 		KeycodeService,
 		SecuritySystemService,
-		WebSocketService
+		WebSocketService,
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: TokenInterceptor,
+			multi: true
+		}
 	]
 })
 export class KeypadModule { }
