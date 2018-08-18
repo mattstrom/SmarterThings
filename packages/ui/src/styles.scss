@@ -1,8 +1,23 @@
-/* You can add global styles to this file, and also import other style files */
+@import './styles/variables';
+
+html {
+	box-sizing: border-box;
+}
+
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
+html,
 body {
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	background-color: $background-color;
 	color: white;
 	font-family: 'Open Sans', Tahoma, sans-serif;
-
-	margin: 0;
-	padding: 0;
 }

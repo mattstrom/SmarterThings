@@ -1,0 +1,10 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %fill-parent;
+	display: block;
+
+	mat-progress-bar {
+		height: 3px;
+	}
+}

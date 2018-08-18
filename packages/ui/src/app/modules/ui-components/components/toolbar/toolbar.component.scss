@@ -1,0 +1,30 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %fill-parent;
+
+	display: grid;
+	grid-template-rows: 64px 2px;
+	grid-template-columns: 100%;
+	grid-template-areas:
+		'main'
+		'progressbar';
+
+	::ng-deep mat-toolbar {
+		@extend %stack-horizontal;
+		grid-area: main;
+		justify-content: space-between;
+		align-items: center;
+
+		//mat-toolbar-row:nth-child(2) {
+		//	@extend %fill-parent;
+		//	grid-area: progressbar;
+		//	background-color: transparent;
+		//	padding: 0;
+		//}
+	}
+
+	smt-toolbar-progress-bar {
+		grid-area: progressbar;
+	}
+}

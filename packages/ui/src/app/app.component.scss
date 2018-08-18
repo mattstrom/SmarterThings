@@ -1,6 +1,8 @@
 @import '../styles/common';
 
-$toolbar-height: 64px;
+$toolbar-top-height: 64px;
+$toolbar-loader-height: 2px;
+$toolbar-height: $toolbar-top-height + $toolbar-loader-height;
 
 :host {
 	display: grid;
@@ -12,16 +14,11 @@ $toolbar-height: 64px;
 		'toolbar'
 		'main';
 
-
 	background-color: #222233;
 
-	::ng-deep mat-toolbar {
+	smt-toolbar {
 		grid-area: toolbar;
 		height: 64px;
-
-		@extend %stack-horizontal;
-		justify-content: space-between;
-		align-items: center;
 	}
 
 	mat-toolbar + div {

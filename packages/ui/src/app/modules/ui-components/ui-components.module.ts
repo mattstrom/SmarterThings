@@ -6,35 +6,40 @@ import {
 	MatIconModule,
 	MatInputModule,
 	MatMenuModule,
+	MatProgressBarModule,
 	MatProgressSpinnerModule,
 	MatSidenavModule,
 	MatToolbarModule
 } from '@angular/material';
 
+import { ToolbarComponent, ToolbarProgressBarComponent } from './components';
+
+
+const MaterialComponents = [
+	MatButtonModule,
+	MatDialogModule,
+	MatIconModule,
+	MatInputModule,
+	MatMenuModule,
+	MatProgressBarModule,
+	MatProgressSpinnerModule,
+	MatSidenavModule,
+	MatToolbarModule
+];
 
 @NgModule({
-	declarations: [],
+	declarations: [
+		ToolbarComponent,
+		ToolbarProgressBarComponent
+	],
 	imports: [
 		CommonModule,
-
-		MatButtonModule,
-		MatDialogModule,
-		MatIconModule,
-		MatInputModule,
-		MatMenuModule,
-		MatProgressSpinnerModule,
-		MatSidenavModule,
-		MatToolbarModule
+		...MaterialComponents
 	],
 	exports: [
-		MatButtonModule,
-		MatDialogModule,
-		MatIconModule,
-		MatInputModule,
-		MatMenuModule,
-		MatProgressSpinnerModule,
-		MatSidenavModule,
-		MatToolbarModule
+		ToolbarComponent,
+		ToolbarProgressBarComponent,
+		...MaterialComponents
 	]
 })
 export class UiComponentsModule { }

@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JwtModule } from '@auth0/angular-jwt';
+import { StoreModule } from '@ngrx/store';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -17,8 +18,10 @@ import {
 } from './modules/auth';
 import { WebSocketService } from './modules/keypad/services';
 import { UiComponentsModule } from './modules/ui-components';
+import { reducers, metaReducers } from './store';
 import { IdentityService } from './services';
 import { ApiUrlToken, SmartThingsApiToken, SmartThingsEndpoint, WsUrlToken } from './tokens';
+import * as fromLoadingStatus from './store/loading-status/loading-status.reducer';
 
 
 @NgModule({
@@ -71,7 +74,9 @@ import { ApiUrlToken, SmartThingsApiToken, SmartThingsEndpoint, WsUrlToken } fro
 				canLoad: [AuthGuard],
 				canActivate: [SmartThingsAuthGuard]
 			}
-		])
+		]),
+		StoreModule.forRoot(reducers, { metaReducers }),
+		StoreModule.forFeature('loadingStatus', fromLoadingStatus.reducer)
 	],
 	providers: [
 		IdentityService,
