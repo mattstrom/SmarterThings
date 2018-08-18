@@ -1,9 +1,10 @@
 {
   "name": "SmarterThings Keypad",
   "short_name": "Keypad",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
-  "display": "standalone",
+  "theme_color": "#1CB0FE",
+  "background_color": "#222233",
+  "display": "fullscreen",
+  "orientation": "landscape-primary",
   "scope": "/",
   "start_url": "/",
   "icons": [
