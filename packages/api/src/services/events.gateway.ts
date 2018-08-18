@@ -1,25 +1,29 @@
 import { SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse, NestGateway } from '@nestjs/websockets';
 
+import { logger } from '../modules/logging/winston';
+
 
 @WebSocketGateway({ path: '/ws' })
 export class EventsGateway implements NestGateway {
 	@WebSocketServer() server;
 
+	constructor() {}
+
 	afterInit() {
-		console.log('Gateway connected');
+		logger.info('Gateway connected');
 	}
 
 	handleConnection() {
-		console.log('Connected client');
+		logger.info('Connected client');
 	}
 
 	handleDisconnect() {
-		console.log('Client disconnected');
+		logger.info('Client disconnected');
 	}
 
 	@SubscribeMessage('message')
 	onEvent(client, data): WsResponse<any> {
-		console.log('[server](message): %s', JSON.stringify(data));
+		logger.info('[server](message): %s', JSON.stringify(data));
 
 		return {
 			event: 'message',

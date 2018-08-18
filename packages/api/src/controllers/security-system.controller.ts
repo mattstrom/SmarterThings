@@ -6,7 +6,7 @@ import * as request from 'request';
 import { EntityManager } from 'typeorm';
 
 import { Server } from '../entities';
-import { EventsGateway } from '../services/events.gateway';
+import { EventsGateway } from '../services';
 import { ServerId, SmartThingsAppUrl } from '../types';
 
 
@@ -39,7 +39,6 @@ export class SecuritySystemController {
 	@UseGuards(AuthGuard('jwt'))
 	@Post('/status')
 	async getStatus(@Body() body: any, @Response() res: express.Response) {
-		const clientId = body.clientId;
 		const server = await this.entityManager.findOne(Server, {});
 
 		if (!server) {
@@ -49,7 +48,7 @@ export class SecuritySystemController {
 		const url = `${this.smartThingsUri}${server.token.accessUrl}/status`;
 		const options: request.CoreOptions = {
 			headers: {
-				Authorization: `Bearer ${server.token.authToken}`,
+				'Authorization': `Bearer ${server.token.authToken}`,
 				'Content-Type': 'application/json'
 			}
 		};
@@ -100,7 +99,6 @@ export class SecuritySystemController {
 		@Response() res: express.Response,
 		@Body() body: any
 	) {
-		const clientId = body['clientId'];
 		const server = await this.entityManager.findOne(Server, {
 			serverId: this.serverId
 		});
@@ -113,7 +111,7 @@ export class SecuritySystemController {
 		const url = `${this.smartThingsUri}${server.token.accessUrl}/arm`;
 		const options: request.CoreOptions = {
 			headers: {
-				Authorization: `Bearer ${server.token.authToken}`,
+				'Authorization': `Bearer ${server.token.authToken}`,
 				'Content-Type': 'application/json'
 			}
 		};
@@ -128,7 +126,6 @@ export class SecuritySystemController {
 		@Response() res: express.Response,
 		@Body() body: { securityCode: string }
 	) {
-		const clientId = body['clientId'];
 		const server = await this.entityManager.findOne(Server, {
 			serverId: this.serverId
 		});
@@ -145,7 +142,7 @@ export class SecuritySystemController {
 
 		const options: request.CoreOptions = {
 			headers: {
-				Authorization: `Bearer ${server.token.authToken}`,
+				'Authorization': `Bearer ${server.token.authToken}`,
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(payload)

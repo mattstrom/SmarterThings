@@ -10,7 +10,7 @@ export const providers = [
 	{
 		provide: MorganProvider,
 		useFactory: (): morgan.Morgan => {
-			return morgan
+			return morgan;
 		}
 	}
 ];
