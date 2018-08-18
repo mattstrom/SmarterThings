@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, OnDestroy, QueryList, ViewChildren } 
 import { fromEvent, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+import { Blop } from '../../../../utils/sound';
 import { KeycodeService } from '../../services';
 import { KeypadButtonComponent } from '../keypad-button/keypad-button.component';
 
@@ -27,7 +28,10 @@ export class NumpadComponent implements OnInit, AfterViewInit, OnDestroy {
 				map((event: KeyboardEvent) => event.keyCode - 48)
 			)
 			.subscribe((value: number) => {
-				this.keycodeService.input$.next(value.toString());
+				const key = value.toString();
+
+				this.playSound(key);
+				this.keycodeService.input$.next(key);
 			});
 	}
 
@@ -46,6 +50,12 @@ export class NumpadComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	onClick(key: string) {
+		this.playSound(key);
 		this.keycodeService.input$.next(key);
+	}
+
+	private playSound(value: string) {
+		const blop = new Blop(new AudioContext(), 0.005);
+		blop.start(0.01);
 	}
 }
