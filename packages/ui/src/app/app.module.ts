@@ -20,8 +20,8 @@ import { WebSocketService } from './modules/keypad/services';
 import { UiComponentsModule } from './modules/ui-components';
 import { reducers, metaReducers } from './store';
 import { IdentityService } from './services';
-import { ApiUrlToken, SmartThingsApiToken, SmartThingsEndpoint, WsUrlToken } from './tokens';
 import * as fromLoadingStatus from './store/loading-status/loading-status.reducer';
+import { ApiUrlToken, WsUrlToken } from './tokens';
 
 
 @NgModule({
@@ -33,7 +33,7 @@ import * as fromLoadingStatus from './store/loading-status/loading-status.reduce
 		BrowserAnimationsModule,
 		AuthModule,
 		UiComponentsModule,
-		ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
+		ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
 		JwtModule.forRoot({
 			config: {
 				tokenGetter: () => {
@@ -81,22 +81,8 @@ import * as fromLoadingStatus from './store/loading-status/loading-status.reduce
 	providers: [
 		IdentityService,
 		WebSocketService,
-		{
-			provide: ApiUrlToken,
-			useValue: environment.apiUrl
-		},
-		{
-			provide: SmartThingsApiToken,
-			useValue: environment.smartthings.apiToken
-		},
-		{
-			provide: SmartThingsEndpoint,
-			useValue: environment.smartthings.endpoint
-		},
-		{
-			provide: WsUrlToken,
-			useValue: environment.wsUrl
-		}
+		{ provide: ApiUrlToken, useValue: '/api' },
+		{ provide: WsUrlToken, useValue: `ws://${location.host}` }
 	],
 	bootstrap: [AppComponent]
 })

@@ -14,7 +14,7 @@ ADD . /build
 
 RUN \
 	npm install && \
-	npm run build -- --configuration=docker
+	npm run build -- --configuration=production
 
 
 FROM node:10.5.0-alpine

@@ -1,0 +1,13 @@
+{
+	"/api": {
+		"target": "http://localhost:4567",
+		"pathRewrite": {
+			"^/api" : ""
+		}
+	},
+	"/ws": {
+		"target": "ws://localhost:4567",
+    "changeOrigin": true,
+    "ws": true
+	}
+}
