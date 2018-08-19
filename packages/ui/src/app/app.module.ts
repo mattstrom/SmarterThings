@@ -21,6 +21,7 @@ import { UiComponentsModule } from './modules/ui-components';
 import { reducers, metaReducers } from './store';
 import { IdentityService } from './services';
 import * as fromLoadingStatus from './store/loading-status/loading-status.reducer';
+import { tokenGetter } from './token-getter';
 import { ApiUrlToken, WsUrlToken } from './tokens';
 
 
@@ -36,9 +37,7 @@ import { ApiUrlToken, WsUrlToken } from './tokens';
 		ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
 		JwtModule.forRoot({
 			config: {
-				tokenGetter: () => {
-					return localStorage.getItem('accessToken');
-				},
+				tokenGetter,
 				whitelistedDomains: [
 					'localhost:4200',
 					'localhost:4567',

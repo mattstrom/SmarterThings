@@ -9,7 +9,7 @@
 			   placeholder="Password" required
 			   [(ngModel)]="model.credentials.password" />
 	</mat-form-field>
-	<button mat-raised-button color="primary" (click)="onRegister($event)">Register</button>
+	<button mat-raised-button color="primary" (click)="onRegister()">Register</button>
 	<mat-progress-spinner *ngIf="authenticating | async"
 						  mode="indeterminate">
 	</mat-progress-spinner>

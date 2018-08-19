@@ -17,7 +17,7 @@ export class KeypadButtonComponent implements OnInit {
 	@Input() action: string;
 	@Output() clicked = new EventEmitter<string>();
 
-	private pressed$: Observable<boolean>;
+	public pressed$: Observable<boolean>;
 
 	constructor(private elementRef: ElementRef) { }
 

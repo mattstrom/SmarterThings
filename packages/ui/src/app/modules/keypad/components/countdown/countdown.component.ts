@@ -11,7 +11,7 @@ import { SecuritySystemService } from '../../services';
 	styleUrls: ['./countdown.component.scss']
 })
 export class CountdownComponent implements OnInit {
-	private timer$: Observable<number>;
+	public timer$: Observable<number>;
 
 	constructor(private securitySystem: SecuritySystemService) { }
 
