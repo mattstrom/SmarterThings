@@ -1,3 +1,6 @@
 export const environment: EnvironmentContext = {
-	production: true
+	production: true,
+	whitelistedDomains: [
+		`http://${location.host}`
+	]
 };

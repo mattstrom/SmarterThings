@@ -38,14 +38,7 @@ import { ApiUrlToken, WsUrlToken } from './tokens';
 		JwtModule.forRoot({
 			config: {
 				tokenGetter,
-				whitelistedDomains: [
-					'localhost:4200',
-					'localhost:4567',
-					'localhost',
-					'home.mattstrom.com:4200',
-					'home.mattstrom.com:4567',
-					'home.mattstrom.com'
-				]
+				whitelistedDomains: environment.whitelistedDomains
 			}
 		}),
 		RouterModule.forRoot([

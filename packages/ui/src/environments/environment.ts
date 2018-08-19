@@ -4,5 +4,9 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment: EnvironmentContext = {
-	production: false
+	production: false,
+	whitelistedDomains: [
+		'http://localhost:4200',
+		'http://localhost:4567'
+	]
 };
