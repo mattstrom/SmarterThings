@@ -36,6 +36,8 @@ export class SecuritySystemService {
 			clientId: this.identityService.clientId
 		});
 
+		this.keycodeService.clearCode();
+
 		this.http
 			.put(`${this.apiUrl}/security/arm`, payload, {
 				headers: headers,
@@ -59,6 +61,8 @@ export class SecuritySystemService {
 		if (code.length < 4) {
 			throw new RangeError();
 		}
+
+		this.keycodeService.clearCode();
 
 		const headers = new HttpHeaders().set('Content-Type', 'application/json');
 		const payload = JSON.stringify({
