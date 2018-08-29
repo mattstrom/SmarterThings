@@ -7,6 +7,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { StoreModule } from '@ngrx/store';
 
 import { environment } from '../environments/environment';
+import { PublicSideComponent } from './components/public-side/public-side.component';
 import { AppComponent } from './app.component';
 import {
 	AuthGuard,
@@ -27,7 +28,8 @@ import { ApiUrlToken, WsUrlToken } from './tokens';
 
 @NgModule({
 	declarations: [
-		AppComponent
+		AppComponent,
+		PublicSideComponent
 	],
 	imports: [
 		BrowserModule.withServerTransition({appId: 'serverApp'}),
@@ -48,17 +50,23 @@ import { ApiUrlToken, WsUrlToken } from './tokens';
 				pathMatch: 'full'
 			},
 			{
-				path: 'connect',
-				component: ConnectComponent,
-				canActivate: [AuthGuard]
-			},
-			{
-				path: 'login',
-				component: LoginComponent
-			},
-			{
-				path: 'register',
-				component: RegisterComponent
+				path: '',
+				component: PublicSideComponent,
+				children: [
+					{
+						path: 'connect',
+						component: ConnectComponent,
+						canActivate: [AuthGuard]
+					},
+					{
+						path: 'login',
+						component: LoginComponent
+					},
+					{
+						path: 'register',
+						component: RegisterComponent
+					}
+				]
 			},
 			{
 				path: 'keypad',

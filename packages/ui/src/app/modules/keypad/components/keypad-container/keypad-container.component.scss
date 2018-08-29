@@ -1,16 +1,31 @@
 :host {
-	display: grid;
-	width: 100%;
-	height: 100%;
-	grid-template-rows: 30px 1fr 16px repeat(3, 1fr);
-	grid-template-columns: 40% 40% 20%;
-	grid-template-areas:
-		"numpad spacer spacer"
-		"numpad display status"
-		"numpad spacer2 spacer2"
-		"numpad controls other"
-		"numpad controls other"
-		"numpad controls other";
+	@media screen and (orientation: landscape) {
+		display: grid;
+		width: 100%;
+		height: 100%;
+		grid-template-rows: 30px 1fr 16px repeat(3, 1fr);
+		grid-template-columns: 40% 40% 20%;
+		grid-template-areas:
+			"numpad spacer spacer"
+			"numpad display status"
+			"numpad spacer2 spacer2"
+			"numpad controls other"
+			"numpad controls other"
+			"numpad controls other";
+	}
+
+	@media screen and (orientation: portrait) {
+		display: grid;
+		width: 100vw;
+		height: 100%;
+		grid-template-rows: 100px repeat(3, 1fr);
+		grid-template-columns: 100%;
+		grid-template-areas:
+			"display"
+			"numpad"
+			"controls"
+			"status";
+	}
 
 	numpad {
 		grid-area: numpad;
@@ -19,6 +34,7 @@
 
 	keycode-display {
 		grid-area: display;
+		align-self: flex-end;
 	}
 
 	control-pad {

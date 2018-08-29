@@ -1,0 +1,31 @@
+@import '../../../styles/common';
+
+$toolbar-top-height: 64px;
+$toolbar-loader-height: 2px;
+$toolbar-height: $toolbar-top-height + $toolbar-loader-height;
+
+:host {
+	display: grid;
+	width: 100vw;
+	height: 100vh;
+
+	grid-template-rows: $toolbar-height calc(100vh - #{$toolbar-height});
+	grid-template-areas:
+		'toolbar'
+		'main';
+
+	background-color: #222233;
+
+	smt-toolbar {
+		grid-area: toolbar;
+		height: 64px;
+	}
+
+	mat-toolbar + div {
+		grid-area: main;
+	}
+
+	mat-menu {
+		display: none;
+	}
+}
