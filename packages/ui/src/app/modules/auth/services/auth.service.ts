@@ -1,13 +1,11 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store } from '@ngxs/store';
 import * as HttpStatus from 'http-status-codes';
-import {  } from 'jwt-decode';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { finalize, map, share } from 'rxjs/operators';
-import { State } from '../../../store';
-import { SetLoadingStatus } from '../../../store/loading-status/loading-status.actions';
 
+import { SetLoadingStatus } from '../../../state';
 import { ApiUrlToken } from '../../../tokens';
 import { Credentials } from '../models';
 
@@ -19,7 +17,7 @@ export class AuthService {
 
 	constructor(
 		private http: HttpClient,
-		private store: Store<State>,
+		private store: Store,
 		@Inject(ApiUrlToken) private apiUrl: string
 	) { }
 
