@@ -1,0 +1,115 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  initialize:
+    docker:
+      - image: circleci/node:10.5
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - save-cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/circleci-demo-workflows
+      - persist_to_workspace: # Persist the specified paths (workspace/echo-output)
+          # into the workspace  for use in downstream job. Must be an absolute path,
+          # or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: /home/circleci
+          # Must be relative path from root
+          paths:
+            - .
+
+  build-api:
+    docker:
+    # specify the version you desire here
+    - image: circleci/node:10.5
+
+    # Specify service dependencies here if necessary
+    # CircleCI maintains a library of pre-built images
+    # documented at https://circleci.com/docs/2.0/circleci-images/
+    # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo/packages/api
+
+    steps:
+    - attach_workspace:
+        # Must be absolute path or relative path from working_directory
+        at: /home/circleci
+    - restore_cache:
+        keys:
+        - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }}
+        # fallback to using the latest cache if no exact match is found
+        - v1-dependencies-
+
+    - run: npm ci
+
+    - save_cache:
+        paths:
+        - node_modules
+        key: v1-dependencies-{{ .Environment.CIRCLE_SHA1 }}
+
+    - run: npm run build
+
+  build-ui:
+    docker:
+      - image: circleci/node:10.5
+    working_directory: ~/repo/packages/ui
+
+    steps:
+    - attach_workspace:
+        # Must be absolute path or relative path from working_directory
+        at: /home/circleci
+    - restore_cache:
+        keys:
+        - v1-dependencies-{{ .Environment.CIRCLE_SHA1 }}
+        # fallback to using the latest cache if no exact match is found
+        - v1-dependencies-
+
+    - run: npm ci
+
+    - save_cache:
+        paths:
+        - node_modules
+        key: v1-dependencies-{{ .Environment.CIRCLE_SHA1 }}
+
+    - run: npm run build
+
+  deploy:
+    machine:
+      image: circleci/node:10.5
+    working_directory: ~/repo
+    steps:
+    - attach_workspace:
+        # Must be absolute path or relative path from working_directory
+        at: /home/circleci
+    - run:
+        name: bundle
+        command: |
+          sh support/circleci/initialize_env.sh;
+          npm run compose:build;
+          mkdir -p /build;
+          tar -xczf /build/output.tar.gz packages/api/dist;
+    - store_artifacts:
+        path: /build/output.tar.gz
+        destination: artifact-file
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - initialize
+      - build-api:
+          requires:
+            - initialize
+      - build-ui:
+          requires:
+            - initialize
+
+      - deploy:
+          requires:
+            - build-api
+            - build-ui

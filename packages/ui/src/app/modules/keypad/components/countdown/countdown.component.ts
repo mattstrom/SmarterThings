@@ -20,7 +20,7 @@ export class CountdownComponent implements OnInit {
 			.pipe(
 				switchMap((countdown: number) => {
 					if (countdown === null) {
-						return of('');
+						return of(0);
 					}
 
 					return interval(1000).pipe(
