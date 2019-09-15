@@ -3,8 +3,9 @@ import { Injectable, Inject } from '@angular/core';
 import * as HttpStatus from 'http-status-codes';
 import { BehaviorSubject } from 'rxjs';
 
+import { WebSocketService } from '../../../services';
 import { ApiUrlToken } from '../../../tokens';
-import { IdentityService, KeycodeService, WebSocketService } from './index';
+import { IdentityService, KeycodeService } from './index';
 
 
 export type SecuritySystemStatus = 'armed' | 'disarmed' | 'unknown';
@@ -126,6 +127,9 @@ export class SecuritySystemService {
 				const remaining = Math.floor(diff / 1000);
 
 				this.countdown$.next(remaining);
+				break;
+			}
+			case 'refreshSensorsState': {
 				break;
 			}
 			default: {

@@ -1,3 +1,8 @@
-<div>
-	{{timer$ | async}}
+<mat-progress-spinner mode="determinate"
+					  [color]="color$ | async"
+					  [value]="percentage$ | async"
+					  [diameter]="300">
+</mat-progress-spinner>
+<div class="countdown">
+	{{countdown$ | async | timer}}
 </div>

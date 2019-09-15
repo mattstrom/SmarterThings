@@ -1,3 +1,22 @@
+@import '../../../../../styles/common';
+
 :host {
-	font-size: 32px;
+	@extend %stack-vertical;
+	position: relative;
+	justify-content: center;
+	align-items: center;
+
+	font-size: 64px;
+
+	.countdown {
+		@extend %fill-parent;
+		@extend %stack-vertical;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		position: absolute;
+		justify-content: center;
+		align-items: center;
+	}
 }

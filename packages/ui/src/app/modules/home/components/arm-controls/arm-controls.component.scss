@@ -1,0 +1,56 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %fill-parent;
+	display: grid;
+	position: relative;
+	grid-template-rows: 80% 20%;
+	grid-template-columns: 50% 50%;
+	grid-template-areas:
+		'left right'
+		'entry entry';
+
+
+	.left {
+		grid-area: left;
+	}
+
+	.right {
+		grid-area: right;
+	}
+
+	.left, .right {
+		padding: 16px;
+		@extend %stack-vertical;
+		justify-content: stretch;
+		align-items: stretch;
+
+		button {
+			width: 100%;
+			height: 100%;
+
+			font-size: 2em;
+		}
+	}
+
+	.entry {
+		grid-area: entry;
+
+		@extend %stack-horizontal;
+		justify-content: space-evenly;
+	}
+
+	.overlay {
+		@extend %fill-parent;
+		@extend %stack-vertical;
+		position: absolute;
+		align-items: center;
+		padding-top: 12px;
+
+		pointer-events: none;
+
+		& > * {
+			pointer-events: all;
+		}
+	}
+}

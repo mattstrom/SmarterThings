@@ -1,0 +1,12 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %fill-parent;
+	display: block;
+	padding: 16px;
+
+	.scroll {
+		@extend %fill-parent;
+		overflow: scroll;
+	}
+}

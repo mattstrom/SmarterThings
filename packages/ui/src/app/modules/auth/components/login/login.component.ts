@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
 		private route: ActivatedRoute,
 		private router: Router
 	) {
-		this.redirectUrl = this.route.snapshot.queryParams['redirectUrl'] || '/keypad';
+		this.redirectUrl = this.route.snapshot.queryParams['redirectUrl'] || '/home';
 	}
 
 	ngOnInit() {

@@ -1,13 +1,9 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Column } from 'typeorm';
 
-@Entity()
 export class SmartThingsToken {
-	@ObjectIdColumn()
-	_id: ObjectID;
-
-	@Column()
+	@Column({ nullable: true })
 	accessUrl: string;
 
-	@Column()
+	@Column({ nullable: true })
 	authToken: string;
 }

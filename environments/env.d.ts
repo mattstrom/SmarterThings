@@ -6,7 +6,6 @@ declare namespace NodeJS {
 		JWT_SECRET: string;
 		REDIRECT_URL: string;
 		SERVER_ID: string;
-		TYPEORM_HOST: string;
 
 		SMARTTHINGS_CLIENT_ID: string;
 		SMARTTHINGS_CLIENT_SECRET: string;

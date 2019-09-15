@@ -1,0 +1,30 @@
+<div class="back">
+	<button mat-raised-button color="primary"
+			routerLink="..">
+		<mat-icon>arrow_back</mat-icon>
+	</button>
+</div>
+<div class="grid">
+	<mat-grid-list [cols]="2" rowHeight="2:1">
+		<mat-grid-tile>
+			<button mat-raised-button routerLink="users">
+				Users
+			</button>
+		</mat-grid-tile>
+		<mat-grid-tile>
+			<button mat-raised-button>
+				Sounds
+			</button>
+		</mat-grid-tile>
+		<mat-grid-tile>
+			<button mat-raised-button>
+				Screen
+			</button>
+		</mat-grid-tile>
+		<mat-grid-tile>
+			<button mat-raised-button>
+				SmartThings
+			</button>
+		</mat-grid-tile>
+	</mat-grid-list>
+</div>

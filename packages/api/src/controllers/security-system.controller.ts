@@ -1,13 +1,24 @@
-import { BadRequestException, Body, Controller, Inject, Post, Put, Request, Response, UseGuards } from '@nestjs/common';
+import {
+	BadRequestException,
+	Body,
+	Controller,
+	Get,
+	Inject, Param,
+	Post,
+	Put,
+	Request,
+	Response,
+	UseGuards
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import * as express from 'express';
 import * as HttpStatus from 'http-status-codes';
 import * as request from 'request';
 import { EntityManager } from 'typeorm';
 
+import config from '../configuration';
 import { Server } from '../entities';
 import { EventsGateway } from '../services';
-import { ServerId, SmartThingsAppUrl } from '../types';
 
 
 @Controller('security')
@@ -15,9 +26,7 @@ export class SecuritySystemController {
 
 	constructor(
 		private gateway: EventsGateway,
-		private entityManager: EntityManager,
-		@Inject(ServerId) private serverId: string,
-		@Inject(SmartThingsAppUrl) private smartThingsUri: string
+		private entityManager: EntityManager
 	) { }
 
 	@Post('/message')
@@ -45,7 +54,7 @@ export class SecuritySystemController {
 			throw new BadRequestException();
 		}
 
-		const url = `${this.smartThingsUri}${server.token.accessUrl}/status`;
+		const url = `${config.smartthings.tokenHost}${server.token.accessUrl}/status`;
 		const options: request.CoreOptions = {
 			headers: {
 				'Authorization': `Bearer ${server.token.authToken}`,
@@ -61,6 +70,73 @@ export class SecuritySystemController {
 		const message = {
 			action: 'updateStatus',
 			data: body
+		};
+
+		try {
+			await this.gateway.send(message);
+
+			res.sendStatus(HttpStatus.OK);
+		} catch (e) {
+			res.sendStatus(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@UseGuards(AuthGuard('jwt'))
+	@Get('sensors')
+	async getSensors(
+		@Response() res: express.Response
+	) {
+		const server = await this.entityManager.findOne(Server, {
+			serverId: config.serverId
+		});
+
+		if (!server) {
+			res.sendStatus(HttpStatus.BAD_REQUEST);
+			return;
+		}
+
+		const url = `${config.smartthings.tokenHost}${server.token.accessUrl}/sensors`;
+		const options: request.CoreOptions = {
+			headers: {
+				'Authorization': `Bearer ${server.token.authToken}`,
+				'Content-Type': 'application/json'
+			}
+		};
+
+		request.get(url, options).pipe(res);
+	}
+
+	@UseGuards(AuthGuard('jwt'))
+	@Put('sensors/bypass')
+	async bypassSensors(
+		@Response() res: express.Response
+	) {
+		const server = await this.entityManager.findOne(Server, {
+			serverId: config.serverId
+		});
+
+		if (!server) {
+			res.sendStatus(HttpStatus.BAD_REQUEST);
+			return;
+		}
+
+		const url = `${config.smartthings.tokenHost}${server.token.accessUrl}/sensors/bypass`;
+		const options: request.CoreOptions = {
+			headers: {
+				'Authorization': `Bearer ${server.token.authToken}`,
+				'Content-Type': 'application/json'
+			}
+		};
+
+		request.put(url, options).pipe(res);
+	}
+
+	@Post('refresh')
+	async refreshSensorStates(
+		@Response() res: express.Response
+	) {
+		const message = {
+			action: 'refresh'
 		};
 
 		try {
@@ -92,6 +168,27 @@ export class SecuritySystemController {
 		}
 	}
 
+	@Post('/relay/:action')
+	async relay(
+		@Request() req: express.Request,
+		@Response() res: express.Response,
+		@Param('action') action,
+		@Body() body: any
+	) {
+		const message = {
+			action,
+			data: body || {}
+		};
+
+		try {
+			await this.gateway.send(message);
+
+			res.sendStatus(HttpStatus.OK);
+		} catch (e) {
+			res.sendStatus(HttpStatus.BAD_REQUEST);
+		}
+	}
+
 	@UseGuards(AuthGuard('jwt'))
 	@Put('/arm')
 	async arm(
@@ -100,7 +197,7 @@ export class SecuritySystemController {
 		@Body() body: any
 	) {
 		const server = await this.entityManager.findOne(Server, {
-			serverId: this.serverId
+			serverId: config.serverId
 		});
 
 		if (!server) {
@@ -108,12 +205,13 @@ export class SecuritySystemController {
 			return;
 		}
 
-		const url = `${this.smartThingsUri}${server.token.accessUrl}/arm`;
+		const url = `${config.smartthings.tokenHost}${server.token.accessUrl}/arm`;
 		const options: request.CoreOptions = {
 			headers: {
 				'Authorization': `Bearer ${server.token.authToken}`,
 				'Content-Type': 'application/json'
-			}
+			},
+			body: JSON.stringify(body || {})
 		};
 
 		request.put(url, options).pipe(res);
@@ -127,7 +225,7 @@ export class SecuritySystemController {
 		@Body() body: { securityCode: string }
 	) {
 		const server = await this.entityManager.findOne(Server, {
-			serverId: this.serverId
+			serverId: config.serverId
 		});
 
 		if (!server) {
@@ -135,7 +233,39 @@ export class SecuritySystemController {
 			return;
 		}
 
-		const url = `${this.smartThingsUri}${server.token.accessUrl}/disarm`;
+		const url = `${config.smartthings.tokenHost}${server.token.accessUrl}/disarm`;
+		const payload = {
+			securityCode: body.securityCode
+		};
+
+		const options: request.CoreOptions = {
+			headers: {
+				'Authorization': `Bearer ${server.token.authToken}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(payload)
+		};
+
+		request.put(url, options).pipe(res);
+	}
+
+	@UseGuards(AuthGuard('jwt'))
+	@Put('/try-disarm')
+	async tryDisarm(
+		@Request() req: express.Request,
+		@Response() res: express.Response,
+		@Body() body: any
+	) {
+		const server = await this.entityManager.findOne(Server, {
+			serverId: config.serverId
+		});
+
+		if (!server) {
+			res.sendStatus(HttpStatus.BAD_REQUEST);
+			return;
+		}
+
+		const url = `${config.smartthings.tokenHost}${server.token.accessUrl}/try-disarm`;
 		const payload = {
 			securityCode: body.securityCode
 		};

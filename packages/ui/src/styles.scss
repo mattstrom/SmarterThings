@@ -1,3 +1,4 @@
+@import './styles/theme';
 @import './styles/variables';
 
 html {
@@ -19,5 +20,5 @@ body {
 body {
 	background-color: $background-color;
 	color: white;
-	font-family: 'Open Sans', Tahoma, sans-serif;
+	font-family: mat-font-family($app-typography);
 }

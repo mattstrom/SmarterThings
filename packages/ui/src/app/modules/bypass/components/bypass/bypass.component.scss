@@ -1,0 +1,18 @@
+@import '../../../../../styles/common';
+
+:host {
+	display: grid;
+	grid-template-rows: auto 50px;
+	grid-template-columns: 100%;
+	grid-template-areas:
+		'list'
+		'button';
+
+	smt-sensor-list {
+		grid-area: list;
+	}
+
+	smt-silent-button {
+		grid-area: button;
+	}
+}

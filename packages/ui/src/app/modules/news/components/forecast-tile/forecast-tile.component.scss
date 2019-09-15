@@ -1,0 +1,7 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %fill-parent;
+	border: 1px solid white;
+	padding: 8px;
+}

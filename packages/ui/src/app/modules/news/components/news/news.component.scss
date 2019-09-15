@@ -1,0 +1,20 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %fill-parent;
+
+	display: grid;
+	grid-template-rows: 40% 60%;
+	grid-template-columns: 100%;
+	grid-template-areas:
+		'clock'
+		'forecast';
+
+	smt-clock {
+		grid-area: clock;
+	}
+
+	smt-forecast {
+		grid-area: forecast;
+	}
+}

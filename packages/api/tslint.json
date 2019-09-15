@@ -19,6 +19,7 @@
     "ordered-imports": [
       false
 	],
+  "no-console": [true, "debug", "log"],
 	"no-consecutive-blank-lines": [true, 2],
 	"no-redundant-jsdoc": true,
     "max-line-length": [

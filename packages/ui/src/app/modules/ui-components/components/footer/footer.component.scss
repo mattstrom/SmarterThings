@@ -1,0 +1,10 @@
+@import '../../../../../styles/common';
+
+:host {
+	::ng-deep mat-toolbar {
+		@extend %stack-horizontal;
+		grid-area: main;
+		justify-content: space-between;
+		align-items: center;
+	}
+}

@@ -1,0 +1,40 @@
+@import '../../../../../styles/common';
+@import '../../../../../styles/theme';
+
+
+$primary: map-get($app-theme, primary);
+
+:host {
+	@extend %fill-parent;
+	@extend .mat-raised-button;
+	display: grid;
+	grid-template-rows: 100%;
+	grid-template-columns: 75% 25%;
+	justify-content: stretch;
+	align-items: stretch;
+
+	border-radius: 5px;
+
+	& > div {
+		@extend %fill-parent;
+		padding: 2px;
+
+		& + div {
+			border-left: 1px solid white;
+		}
+	}
+
+	button {
+		@extend %fill-parent;
+		font-size: 1.3em;
+		padding: 0;
+	}
+
+	fa-icon,
+	mat-icon,
+	::ng-deep fa-icon {
+		svg {
+			transform: translateY(-3px);
+		}
+	}
+}

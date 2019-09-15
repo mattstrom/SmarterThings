@@ -1,0 +1,9 @@
+<div class="scroll">
+	<smt-panel title="Sensors Not Ready">
+		<mat-list>
+			<mat-list-item *ngFor="let sensor of trippedSensors | async">
+				<smt-sensor-list-item [sensor]="sensor"></smt-sensor-list-item>
+			</mat-list-item>
+		</mat-list>
+	</smt-panel>
+</div>

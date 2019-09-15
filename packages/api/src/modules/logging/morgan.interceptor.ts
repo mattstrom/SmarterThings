@@ -1,5 +1,5 @@
-import { ExecutionContext, Inject, Injectable, NestInterceptor } from '@nestjs/common';
-import * as morgan from 'morgan';
+import { CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from '@nestjs/common';
+import morgan, { Morgan } from 'morgan';
 import { Observable } from 'rxjs';
 
 import { MorganProvider } from './tokens';
@@ -11,7 +11,7 @@ export class MorganInterceptor implements NestInterceptor {
 	protected readonly options: morgan.Options;
 	protected readonly format: string | morgan.FormatFn;
 
-	constructor(@Inject(MorganProvider) private morganInstance: morgan.Morgan) {
+	constructor(@Inject(MorganProvider) private morganInstance: Morgan) {
 		this.format = 'combined';
 		this.options = {
 			stream: {
@@ -26,8 +26,8 @@ export class MorganInterceptor implements NestInterceptor {
 
 	intercept(
 		context: ExecutionContext,
-		call$: Observable<any>
-	): Observable<any> | Promise<Observable<any>> {
+		next: CallHandler
+	): Observable<any> {
 		const httpRequest = context.switchToHttp().getRequest();
 		const httpResponse = context.switchToHttp().getResponse();
 
@@ -37,6 +37,6 @@ export class MorganInterceptor implements NestInterceptor {
 
 		handler(httpRequest, httpResponse, console.error);
 
-		return call$;
+		return next.handle();
 	}
 }

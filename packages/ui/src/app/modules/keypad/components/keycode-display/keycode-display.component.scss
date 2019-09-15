@@ -3,7 +3,6 @@
 :host {
 	width: 100%;
 	box-sizing: border-box;
-	padding-right: 16px;
 
 	.digits {
 		display: grid;
@@ -27,10 +26,11 @@
 		}
 
 		input {
-			grid-area: 'a';
+			grid-area: a;
 			font-family: monospace;
 			font-size: 32pt;
 			letter-spacing: 2px;
+			text-align: center;
 		}
 
 		.digit {

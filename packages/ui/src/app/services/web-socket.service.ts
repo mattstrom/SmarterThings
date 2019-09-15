@@ -2,16 +2,17 @@ import { Inject, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import * as socketIo from 'socket.io-client';
 
-import { WsUrlToken } from '../../../tokens';
+import { WsUrlToken } from '../tokens';
 import { Message } from '../models';
 
 
 export enum Event {
 	Connect = 'connect',
-	Disconnect = 'disconnect'
+	Disconnect = 'disconnect',
+	Message = 'message'
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class WebSocketService {
 	private socket: SocketIOClient.Socket;
 
@@ -40,7 +41,7 @@ export class WebSocketService {
 			});
 		}
 
-		this.socket.on('message', (data: Message) => {
+		this.socket.on(Event.Message, (data: Message) => {
 			this.message$.next(data);
 		});
 

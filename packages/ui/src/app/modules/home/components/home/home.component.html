@@ -1,0 +1,12 @@
+
+<ng-container>
+	<smt-arm-controls *ngIf="(leftPanel$ | async) === 'arm-controls'"></smt-arm-controls>
+	<smt-bypass *ngIf="(leftPanel$ | async) === 'bypass-controls'"></smt-bypass>
+	<smt-countdown *ngIf="(leftPanel$ | async) === 'countdown'"></smt-countdown>
+	<smt-disarm-controls *ngIf="(leftPanel$ | async) === 'disarm-controls'"></smt-disarm-controls>
+</ng-container>
+
+<ng-container>
+	<smt-news *ngIf="(rightPanel$ | async) === 'news'"></smt-news>
+	<smt-keypad-container *ngIf="(rightPanel$ | async) === 'keypad'"></smt-keypad-container>
+</ng-container>

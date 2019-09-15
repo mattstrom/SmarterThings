@@ -1,0 +1,27 @@
+<div class="left">
+	<button mat-raised-button (click)="onArmAway()">
+		<div>
+			<mat-icon>home</mat-icon>
+		</div>
+		<div>Arm (Away)</div>
+	</button>
+</div>
+<div class="right">
+	<button mat-raised-button (click)="onArmStay()">
+		<div>
+			<mat-icon>home</mat-icon>
+		</div>
+		<div>Arm (Stay)</div>
+	</button>
+</div>
+<div class="entry">
+	<mat-slide-toggle [(ngModel)]="silentExit">
+		Silent Exit
+	</mat-slide-toggle>
+	<mat-slide-toggle [(ngModel)]="entryDelay">
+		Entry Delay
+	</mat-slide-toggle>
+</div>
+<div class="overlay">
+	<smt-bypassed-badge></smt-bypassed-badge>
+</div>

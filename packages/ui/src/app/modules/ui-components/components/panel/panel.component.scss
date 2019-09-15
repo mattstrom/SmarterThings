@@ -1,0 +1,23 @@
+@import '../../../../../styles/theme';
+
+$primary: map-get($app-theme, primary);
+
+:host {
+	.header {
+		background-color: mat-color($primary);
+		padding: 8px;
+	}
+
+	.content {
+		padding: 8px;
+		overflow: scroll;
+		border: {
+			color: mat-color($primary);
+			style: solid;
+			top-width: 0;
+			bottom-width: 1px;
+			left-width: 1px;
+			right-width: 1px;
+		}
+	}
+}

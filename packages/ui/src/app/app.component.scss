@@ -1,7 +1,37 @@
 @import '../styles/common';
+@import '../styles/variables';
+
+$toolbar-top-height: 64px;
+$toolbar-loader-height: 2px;
+$toolbar-height: $toolbar-top-height + $toolbar-loader-height;
 
 :host {
-	display: block;
+	display: grid;
 	width: 100vw;
 	height: 100vh;
+
+	grid-template-rows: $toolbar-height calc(100vh - #{$toolbar-height} * 2) $toolbar-height;
+	grid-template-areas:
+		'toolbar'
+		'main'
+		'footer';
+
+	background-color: $background-color;
+
+	smt-toolbar {
+		grid-area: toolbar;
+		height: 64px;
+	}
+
+	mat-toolbar + div {
+		grid-area: main;
+	}
+
+	smt-footer {
+		grid-area: footer;
+	}
+
+	mat-menu {
+		display: none;
+	}
 }

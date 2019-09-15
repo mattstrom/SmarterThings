@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
 
 import { AuthService } from './modules/auth/services';
-import { WebSocketService } from './modules/keypad/services';
-import { IdentityService } from './services';
+import { IdentityService, SensorsService, WebSocketService } from './services';
+import { LoadingStatus, SecuritySystem, SecuritySystemStateName, SecuritySystemStatus } from './state';
 
 
 @Component({
@@ -15,11 +17,27 @@ import { IdentityService } from './services';
 export class AppComponent {
 	public oauthUrl: string;
 
+	@Select(SecuritySystem.getColor)
+	public color$: Observable<string>;
+
+	@Select(LoadingStatus.getStatus)
+	public loading$: Observable<boolean>;
+
+	@Select(SecuritySystem.getStatus)
+	public status$: Observable<SecuritySystemStatus>;
+
+	@Select(SecuritySystem.getState)
+	public systemState$: Observable<SecuritySystemStateName>;
+
+	@Select(SecuritySystem.getStatusMessage)
+	public statusMessage$: Observable<string>;
+
 	constructor(
 		private authService: AuthService,
 		private identityService: IdentityService,
 		private router: Router,
 		private updates: SwUpdate,
+		private sensors: SensorsService,
 		private webSocketService: WebSocketService
 	) {
 		this.updates.available.subscribe(async event => {

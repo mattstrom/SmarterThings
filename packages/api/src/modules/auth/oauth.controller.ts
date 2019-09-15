@@ -6,9 +6,10 @@ import fetch from 'node-fetch';
 import * as Oauth2 from 'simple-oauth2';
 import { EntityManager, MongoEntityManager } from 'typeorm';
 
+import config from '../../configuration';
 import { Cookie } from '../../decorators';
 import { Server, SmartThingsToken } from '../../entities';
-import { EndpointUrl, OauthModuleOptions, ServerId, RedirectUrl } from '../../types';
+import { OauthModuleOptions } from '../../types';
 
 
 @Controller('oauth')
@@ -17,13 +18,12 @@ export class OauthController {
 	private entryUrls = new Map<string, string>();
 
 	constructor(
-		@Inject(EndpointUrl) private endpointUrl: string,
 		@Inject(EntityManager) private entityManager: MongoEntityManager,
-		@Inject(OauthModuleOptions) private options: Oauth2.ModuleOptions,
-		@Inject(RedirectUrl) private redirectUrl: string,
-		@Inject(ServerId) private serverId: string
+		@Inject(OauthModuleOptions) private options: Oauth2.ModuleOptions
 	) {
 		this.oauth = Oauth2.create(options);
+		const c = config;
+		console.log(c);
 	}
 
 	@UseGuards(AuthGuard('jwt'))
@@ -35,7 +35,7 @@ export class OauthController {
 		@Cookie('clientId') clientId
 	) {
 		const authorizationUri = this.oauth.authorizationCode.authorizeURL({
-			redirect_uri: this.redirectUrl,
+			redirect_uri: config.urls.redirect,
 			scope: 'app',
 			state: clientId
 		});
@@ -43,13 +43,14 @@ export class OauthController {
 		this.entryUrls.set(clientId, entryUrl);
 
 		let server = await this.entityManager.findOne(Server, {
-			serverId: this.serverId
+			serverId: config.serverId
 		});
 
 		if (!server) {
 			server = this.entityManager.create(Server, {
-				serverId: this.serverId,
-				connected: false
+				serverId: config.serverId,
+				connected: false,
+				clients: []
 			});
 		}
 
@@ -69,7 +70,7 @@ export class OauthController {
 	@Get('/connected')
 	async connected(@Response() res: express.Response) {
 		const servers = await this.entityManager.count(Server, {
-			serverId: this.serverId,
+			serverId: config.serverId,
 			connected: true
 		});
 
@@ -86,7 +87,7 @@ export class OauthController {
 		@Response() res: express.Response
 	) {
 		const server = await this.entityManager.findOne(Server, {
-			serverId: this.serverId
+			serverId: config.serverId
 		});
 
 		if (server) {
@@ -122,21 +123,29 @@ export class OauthController {
 			}
 		}
 
+		const tokenParams = {
+			code: code,
+			redirect_uri: config.urls.redirect
+		};
+
+		console.log(JSON.stringify(tokenParams));
+
 		try {
-			const result = await this.oauth.authorizationCode.getToken({
-				code: code,
-				redirect_uri: this.redirectUrl
-			});
+			const result = await this.oauth.authorizationCode.getToken(tokenParams);
+
+			console.log(JSON.stringify(result));
 
 			const bearer = result.access_token;
-			const url = `${this.endpointUrl}?access_token=${result.access_token}`;
+			const url = `${config.urls.endpoint}?access_token=${result.access_token}`;
 
 			const endpoints = await fetch(url, { method: 'GET' })
 				.then(resp => resp.json());
 
+			console.log(JSON.stringify(endpoints));
+
 			const accessUrl = endpoints[0].url;
 			const server = await this.entityManager.findOne(Server, {
-				serverId: this.serverId
+				serverId: config.serverId
 			});
 
 			const token = new SmartThingsToken();
@@ -153,11 +162,8 @@ export class OauthController {
 			res.redirect('/');
 			return;
 		} catch (e) {
-			console.error('Access Token Error', e.message);
+			console.error('Access Token Error', tokenParams, e.message);
+			throw e;
 		}
 	}
 }
-
-// https://graph.api.smartthings.com//api/smartapps/installations/d3efd977-68b5-4fbe-8d2c-de811d01cbac
-//
-// 	Bearer 6919d799-478c-49a8-829b-c48f8cdcb3a9

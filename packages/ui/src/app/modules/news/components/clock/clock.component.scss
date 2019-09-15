@@ -1,0 +1,21 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %fill-parent;
+	@extend %stack-vertical;
+	justify-content: center;
+	align-items: center;
+
+	.time, .date {
+		@extend %flex-no-grow;
+		text-align: center;
+	}
+
+	.time {
+		font-size: 3em;
+	}
+
+	.date {
+		font-size: 1em;
+	}
+}

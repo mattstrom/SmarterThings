@@ -1,0 +1,120 @@
+{
+  "authToken": "5a138cea-6f08-4018-bccc-bc7099371d2f",
+  "refreshToken": "72ec0a97-7394-4200-9f81-4cd4dffc5242",
+  "installedApp": {
+    "installedAppId": "a12cdde4-ca23-4a04-9657-54d46d3df682",
+    "locationId": "95f7e317-79e0-4316-b380-2de53250f66b",
+    "config": {
+      "serverUrl": [
+        {
+          "valueType": "STRING",
+          "stringConfig": {
+            "value": "http://home.mattstrom.com:4567"
+          }
+        }
+      ],
+      "countdown": [
+        {
+          "valueType": "STRING",
+          "stringConfig": {
+            "value": "30"
+          }
+        }
+      ],
+      "securityCode": [
+        {
+          "valueType": "STRING",
+          "stringConfig": {
+            "value": "1234"
+          }
+        }
+      ],
+      "contactSensors": [
+        {
+          "valueType": "DEVICE",
+          "deviceConfig": {
+            "deviceId": "10a03b38-9589-4b5a-8f28-4e1cce114d68",
+            "componentId": "main"
+          }
+        }
+      ],
+      "com.mattstrom.smarterthings.keypad": [
+        {}
+      ],
+      "lights": [
+        {
+          "valueType": "DEVICE",
+          "deviceConfig": {
+            "deviceId": "da3285b6-50cc-445a-9e39-5a193fefd80b",
+            "componentId": "main"
+          }
+        }
+      ]
+    },
+    "permissions": [
+      "r:devices:10a03b38-9589-4b5a-8f28-4e1cce114d68",
+      "r:devices:da3285b6-50cc-445a-9e39-5a193fefd80b",
+      "x:devices:10a03b38-9589-4b5a-8f28-4e1cce114d68",
+      "x:devices:*",
+      "x:devices:da3285b6-50cc-445a-9e39-5a193fefd80b",
+      "l:devices",
+      "r:devices:*"
+    ]
+  },
+  "previousConfig": {
+    "serverUrl": [
+      {
+        "valueType": "STRING",
+        "stringConfig": {
+          "value": "http://home.mattstrom.com:4567"
+        }
+      }
+    ],
+    "countdown": [
+      {
+        "valueType": "STRING",
+        "stringConfig": {
+          "value": "30"
+        }
+      }
+    ],
+    "securityCode": [
+      {
+        "valueType": "STRING",
+        "stringConfig": {
+          "value": "1234"
+        }
+      }
+    ],
+    "contactSensors": [
+      {
+        "valueType": "DEVICE",
+        "deviceConfig": {
+          "deviceId": "10a03b38-9589-4b5a-8f28-4e1cce114d68",
+          "componentId": "main"
+        }
+      }
+    ],
+    "com.mattstrom.smarterthings.keypad": [
+      {}
+    ],
+    "lights": [
+      {
+        "valueType": "DEVICE",
+        "deviceConfig": {
+          "deviceId": "da3285b6-50cc-445a-9e39-5a193fefd80b",
+          "componentId": "main"
+        }
+      }
+    ]
+  },
+  "previousPermissions": [
+    "r:devices:10a03b38-9589-4b5a-8f28-4e1cce114d68",
+    "r:devices:da3285b6-50cc-445a-9e39-5a193fefd80b",
+    "x:devices:10a03b38-9589-4b5a-8f28-4e1cce114d68",
+    "x:devices:*",
+    "x:devices:da3285b6-50cc-445a-9e39-5a193fefd80b",
+    "l:devices",
+    "r:devices:*"
+  ]
+}

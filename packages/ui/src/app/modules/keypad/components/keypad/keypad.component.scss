@@ -1,12 +1,19 @@
-:host {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
+@import '../../../../../styles/common';
 
-	$button-size: 50px;
+:host {
+	@extend %fill-parent;
+	//display: flex;
+	//flex-direction: column;
+	//justify-content: flex-start;
+	//align-items: center;
+	display: grid;
+	grid-template-rows: repeat(4, 1fr);
+	grid-template-columns: repeat(3, 1fr);
+
+	$button-size: 100px;
 
 	button {
+		@extend %fill-parent;
 		background-color: #0066cc;
 		border: none;
 		border-radius: $button-size / 2;
@@ -16,7 +23,7 @@
 		}
 		margin: 8px;
 		padding: 8px;
-		width: $button-size;
-		height: $button-size;
+		//width: $button-size;
+		//height: $button-size;
 	}
 }

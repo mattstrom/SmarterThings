@@ -1,0 +1,20 @@
+:host {
+	display: grid;
+	grid-template-rows: 100%;
+	grid-template-columns: 65px auto;
+	grid-template-areas: 'back settings';
+
+	.back {
+		grid-area: back;
+	}
+
+	.grid {
+		grid-area: settings;
+
+		::ng-deep mat-grid-tile button {
+			width: 100%;
+			height: 100%;
+			margin: 32px;
+		}
+	}
+}

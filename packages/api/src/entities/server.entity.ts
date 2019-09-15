@@ -1,10 +1,10 @@
-import { Column, Entity, ObjectIdColumn, ObjectID } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { SmartThingsToken } from '../entities';
 
 @Entity()
 export class Server {
-	@ObjectIdColumn()
-	_id: ObjectID;
+	@PrimaryGeneratedColumn()
+	id: number;
 
 	@Column({ default: 'localhost:4567' })
 	serverId: string;
@@ -12,9 +12,9 @@ export class Server {
 	@Column({ default: false })
 	connected: boolean;
 
-	@Column()
+	@Column(() => SmartThingsToken)
 	token: SmartThingsToken;
 
-	@Column({ default: [] })
-	clients: string[] = [];
+	@Column('simple-json', { default: '[]' })
+	clients: string[];
 }

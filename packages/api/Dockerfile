@@ -1,4 +1,4 @@
-FROM node:10.5.0 AS build
+FROM node:10.12.0 AS build
 
 MAINTAINER Matt Strom [matt@mattstrom.com]
 
@@ -14,13 +14,12 @@ RUN \
 	npm run build
 
 
-FROM node:10.5.0-alpine
+FROM node:10.12.0-alpine
 
 COPY --from=build /build/dist ./dist
+COPY --from=build /build/data ./data
 COPY --from=build /build/node_modules ./node_modules
-
-ENV TYPEORM_HOST=mongodb
 
 EXPOSE 4567
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "--experimental-repl-await", "dist/main.js"]

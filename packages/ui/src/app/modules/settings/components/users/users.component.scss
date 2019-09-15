@@ -1,0 +1,10 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %fill-parent;
+	@extend %stack-vertical;
+	justify-content: stretch;
+	align-items: stretch;
+
+	padding: 16px;
+}

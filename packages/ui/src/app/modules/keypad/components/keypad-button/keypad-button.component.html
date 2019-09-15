@@ -1,5 +1,5 @@
-<button mat-fab color="primary"
+<button mat-raised-button
 	[class.active]="pressed$ | async"
 	(click)="onClick($event)">
-	{{ action }}
+	<ng-content></ng-content>
 </button>

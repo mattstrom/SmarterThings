@@ -1,33 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { interval, Observable, of } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
-
-import { SecuritySystemService } from '../../services';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { ResetCountdown, SecuritySystem } from '../../../../state';
 
 
 @Component({
-	selector: 'countdown',
+	selector: 'smt-countdown',
 	templateUrl: './countdown.component.html',
 	styleUrls: ['./countdown.component.scss']
 })
-export class CountdownComponent implements OnInit {
-	public timer$: Observable<number>;
+export class CountdownComponent implements OnInit, OnDestroy {
+	public percentage$: Observable<number>;
 
-	constructor(private securitySystem: SecuritySystemService) { }
+	@Select(SecuritySystem.getColor)
+	color$: Observable<number>;
+
+	@Select(SecuritySystem.getCountdown)
+	countdown$: Observable<number>;
+
+	private duration: number = 300;
+
+	constructor(private readonly store: Store) {}
 
 	ngOnInit() {
-		this.timer$ = this.securitySystem.countdown$
-			.pipe(
-				switchMap((countdown: number) => {
-					if (countdown === null) {
-						return of(0);
-					}
+		this.percentage$ = this.countdown$.pipe(
+			filter(timer => timer !== null),
+			map(timer => 100 * timer / this.duration)
+		);
+	}
 
-					return interval(1000).pipe(
-						take(countdown + 1),
-						map((value) => countdown - value)
-					);
-				})
-			);
+	ngOnDestroy() {
+		this.store.dispatch(new ResetCountdown());
 	}
 }

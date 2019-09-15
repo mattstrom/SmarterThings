@@ -1,1 +1,8 @@
-<router-outlet></router-outlet>
+<smt-toolbar [loading]="loading$ | async"
+			 [color]="color$ | async">
+	{{ statusMessage$ | async }}
+</smt-toolbar>
+<div>
+	<router-outlet></router-outlet>
+</div>
+<smt-footer *ngIf="(systemState$ | async) === 'disarmed'"></smt-footer>

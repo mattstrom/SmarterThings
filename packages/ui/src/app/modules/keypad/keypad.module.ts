@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { TokenInterceptor } from '../auth';
 
-import { IdentityService, KeycodeService, SecuritySystemService, WebSocketService } from './services';
+import { TokenInterceptor } from '../auth';
+import { IdentityService, KeycodeService, SecuritySystemService } from './services';
 import { UiComponentsModule } from '../ui-components';
 import { ControlPadComponent } from './components/control-pad/control-pad.component';
 import { CountdownComponent } from './components/countdown/countdown.component';
@@ -13,35 +12,37 @@ import { KeypadButtonComponent } from './components/keypad-button/keypad-button.
 import { KeypadContainerComponent } from './components/keypad-container/keypad-container.component';
 import { NumpadComponent } from './components/keypad/keypad.component';
 import { SecuritySystemStatusComponent } from './components/security-system-status/security-system-status.component';
+import { TimerPipe } from './pipes/timer.pipe';
 
+
+const components = [
+	ControlPadComponent,
+	CountdownComponent,
+	KeycodeDisplayComponent,
+	KeypadButtonComponent,
+	KeypadContainerComponent,
+	NumpadComponent,
+	SecuritySystemStatusComponent
+];
 
 @NgModule({
 	declarations: [
-		NumpadComponent,
-		KeycodeDisplayComponent,
-		KeypadContainerComponent,
-		ControlPadComponent,
-		KeypadButtonComponent,
-		CountdownComponent,
-		SecuritySystemStatusComponent
+		...components,
+		TimerPipe
 	],
 	imports: [
 		CommonModule,
 		HttpClientModule,
-		RouterModule.forChild([
-			{
-				path: '',
-				component: KeypadContainerComponent
-			}
-		]),
-
 		UiComponentsModule
+	],
+	exports: [
+		...components,
+		TimerPipe
 	],
 	providers: [
 		IdentityService,
 		KeycodeService,
 		SecuritySystemService,
-		WebSocketService,
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: TokenInterceptor,

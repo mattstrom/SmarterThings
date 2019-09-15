@@ -1,11 +1,11 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { MongoEntityManager } from 'typeorm';
 
+import config from '../../configuration';
 import { Credentials, User } from '../../entities';
-import { SecretKey } from '../../types';
 import { JwtPayload } from './jwt.strategy';
 
 
@@ -13,8 +13,7 @@ import { JwtPayload } from './jwt.strategy';
 export class AuthService {
 
 	constructor(
-		@InjectEntityManager() private entityManager: MongoEntityManager,
-		@Inject(SecretKey) private secretKey: string
+		@InjectEntityManager() private entityManager: MongoEntityManager
 	) {}
 
 	async authenticateUser(credentials: Credentials): Promise<string> {
@@ -45,10 +44,7 @@ export class AuthService {
 
 		const user = this.entityManager.create(User, {
 			email: credentials.email,
-			password: hashedPassword,
-			tokens: [{
-				access: ''
-			}]
+			password: hashedPassword
 		});
 
 		return await this.entityManager.save(user);
@@ -61,6 +57,6 @@ export class AuthService {
 	}
 
 	private createToken(user: User) {
-		return jwt.sign({ email: user.email }, this.secretKey, { expiresIn: 3600 });
+		return jwt.sign({ email: user.email }, config.jwtSecret, { expiresIn: 3.15e7 });
 	}
 }

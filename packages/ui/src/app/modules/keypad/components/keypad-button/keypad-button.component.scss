@@ -1,12 +1,12 @@
+@import '../../../../../styles/common';
 
 :host {
-	$button-size: 50px;
+	margin: 8px;
 
 	button {
-		font: {
-			size: 16pt;
-		}
-		margin: 8px;
+		@extend %fill-parent;
+		box-sizing: border-box;
+		font-size: 2em;
 		outline: none;
 	}
 }

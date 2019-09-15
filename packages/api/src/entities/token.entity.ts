@@ -1,10 +1,15 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user.entity';
+
 
 @Entity()
 export class Token {
-	@ObjectIdColumn()
-	_id: ObjectID;
+	@PrimaryGeneratedColumn()
+	id: number;
 
 	@Column()
 	access: string;
+
+	@ManyToOne(() => User)
+	user: User;
 }

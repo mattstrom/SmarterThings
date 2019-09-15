@@ -1,15 +1,19 @@
-import { DynamicModule, Global, Module } from '@nestjs/common';
-import * as morgan from 'morgan';
+import { DynamicModule, Global, Logger, Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import morgan, { Morgan } from 'morgan';
+import { EventsGateway } from '../../services';
+import { MorganInterceptor } from './morgan.interceptor';
 
-import { Logger, MorganProvider } from './tokens';
+import { Logger as LoggerToken, MorganProvider, NestLogger } from './tokens';
 import { logger } from './winston';
 
 
 export const providers = [
-	{ provide: Logger, useValue: logger },
+	{ provide: LoggerToken, useValue: logger },
+	{ provide: NestLogger, useValue: new Logger() },
 	{
 		provide: MorganProvider,
-		useFactory: (): morgan.Morgan => {
+		useFactory: (): Morgan => {
 			return morgan;
 		}
 	}
@@ -18,7 +22,13 @@ export const providers = [
 @Global()
 @Module({
 	exports: providers,
-	providers: providers
+	providers: [
+		...providers,
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: MorganInterceptor,
+		}
+	]
 })
 export class LoggingModule {
 	static forRoot(): DynamicModule {

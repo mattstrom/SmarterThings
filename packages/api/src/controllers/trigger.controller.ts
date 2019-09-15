@@ -1,23 +1,23 @@
-import { Controller, Get, Inject, Post, Request, Response, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Request, Response, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import * as express from 'express';
 import * as request from 'request';
 
-import { SmartThingsAppUrl } from '../types';
+import config from '../configuration';
 
 
 @Controller('trigger')
 @UseGuards(AuthGuard('jwt'))
 export class TriggerController {
 
-	constructor(@Inject(SmartThingsAppUrl) private smartThingsAppUrl) {}
+	constructor() {}
 
 	@Get('/event')
 	private event(
 		@Request() req: express.Request,
 		@Response() res: express.Response
 	) {
-		const baseUrl = this.smartThingsAppUrl;
+		const baseUrl = config.smartthings.tokenHost;
 		let url: string;
 
 		if (req.query.trigger_by_type === 'pir-motion') {

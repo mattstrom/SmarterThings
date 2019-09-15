@@ -5,8 +5,9 @@
 
 export const environment: EnvironmentContext = {
 	production: false,
+	apiUrl: 'https://keypad.mattstrom.com/api',
+	wsUrl: 'wss://keypad.mattstrom.com',
 	whitelistedDomains: [
-		'http://localhost:4200',
-		'http://localhost:4567'
+		'https://keypad.mattstrom.com'
 	]
 };

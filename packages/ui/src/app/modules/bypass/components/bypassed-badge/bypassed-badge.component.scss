@@ -1,0 +1,10 @@
+@import '../../../../../styles/common';
+@import '../../../../../styles/theme';
+
+:host {
+	display: block;
+
+	button {
+		font-size: 1em;
+	}
+}

@@ -1,5 +1,5 @@
 {
-  "name": "@mattstrom/smartthings",
+  "name": "@mattstrom/smarterthings",
   "version": "1.0.0",
   "description": "Solution containing various SmartThings projects",
   "main": "index.js",
@@ -15,10 +15,13 @@
   },
   "author": "Matt Strom",
   "license": "ISC",
-  "devDependencies": {
-    "lerna": "^2.4.0"
-  },
   "dependencies": {
-    "@angular/cli": "^6.0.8"
+    "mqtt": "^2.18.8"
+  },
+  "devDependencies": {
+    "lerna": "^3.6.0",
+    "serverless": "^1.35.0",
+    "tslint": "^5.11.0",
+    "typescript": "^3.2.2"
   }
 }
