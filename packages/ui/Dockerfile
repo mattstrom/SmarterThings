@@ -1,28 +1,29 @@
-FROM node:12.10.0 AS build
+FROM node:12.10.0-alpine AS build
 
 MAINTAINER Matt Strom [matt@mattstrom.com]
 
-RUN \
-	npm install --global local-web-server
-
-ADD package.json /tmp/package.json
-RUN mkdir -p /build && cd /tmp && npm install
-RUN mkdir -p /build && cp -a /tmp/node_modules /build
-
+RUN mkdir -p /build
 WORKDIR /build
+
+ADD package.json .
+ADD package-lock.json .
+RUN npm ci --production=false
+
 ADD . /build
 
 RUN \
-	npm install && \
+	npm ci --production=false && \
 	npm run build -- --configuration=production
 
 
-FROM node:12.10.0-alpine
+FROM linuxserver/nginx:arm32v7-latest
 
-COPY --from=build /build/dist .
+RUN rm /etc/nginx/modules/http_lua*
 
-RUN npm install --global local-web-server
+WORKDIR /config
+COPY --from=build /build/support/nginx .
 
-EXPOSE 4200
+WORKDIR /config/www
+COPY --from=build /build/dist/ui .
 
-CMD ["ws", "--port", "4200", "--spa", "index.html", "--directory", "ui"]
+EXPOSE 80

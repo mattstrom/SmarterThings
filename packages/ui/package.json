@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "docker:build": "docker build -t smarterthings_ui --file Dockerfile-arm .",
+    "docker:build": "docker build -t smarterthings_ui .",
     "docker:tag": "docker tag smarterthings_ui registry.mattstrom.com/smarterthings_ui",
     "docker:push": "docker push registry.mattstrom.com/smarterthings_ui"
   },

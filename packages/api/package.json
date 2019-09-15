@@ -16,7 +16,7 @@
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "docker:build": "docker build -t smarterthings_api --file Dockerfile-arm --build-arg NODE_ENV=production .",
+    "docker:build": "docker build -t smarterthings_api --build-arg NODE_ENV=production .",
     "docker:tag": "docker tag smarterthings_api registry.mattstrom.com/smarterthings_api",
     "docker:push": "docker push registry.mattstrom.com/smarterthings_api",
     "webpack": "webpack --config webpack.config.ts"

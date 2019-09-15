@@ -11,17 +11,4 @@ RUN \
 	addgroup www-data -S && \
 	adduser -S -s /sbin/nologin -g www-data -h /var/www -G www-data www-data
 
-# SSL Support
-# RUN \
-# 	apt-get update && \
-# 	apt-get --yes install certbot && \
-# 	certbot --webroot -w /var/www -d home.mattstrom.com
-
-#1
-# admin@mattstrom.com
-# A
-# mattstrom.com
-# 1
-# /var/www
-
 EXPOSE 80 443
