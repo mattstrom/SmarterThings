@@ -1,0 +1,2 @@
+packages/api/config/development.ts filter=git-crypt diff=git-crypt
+packages/api/config/production.ts filter=git-crypt diff=git-crypt
