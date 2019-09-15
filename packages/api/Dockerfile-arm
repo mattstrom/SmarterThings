@@ -1,4 +1,4 @@
-FROM arm32v7/node:12.6.0-slim AS install
+FROM arm32v7/node:12.10.0-slim AS install
 
 MAINTAINER Matt Strom [matt@mattstrom.com]
 
@@ -8,7 +8,8 @@ ADD package.json /tmp/package.json
 RUN cd /tmp && npm install --production=false
 RUN mkdir -p /build && cp -a /tmp/node_modules /build
 
-FROM arm32v7/node:12.6.0-slim AS build
+
+FROM arm32v7/node:12.10.0-slim AS build
 
 COPY --from=install /build /build
 
@@ -18,7 +19,7 @@ ADD . /build
 RUN npm run build
 
 
-FROM arm32v7/node:12.6.0-slim
+FROM arm32v7/node:12.10.0-slim
 
 COPY --from=build /build/dist ./dist
 COPY --from=build /build/data ./data

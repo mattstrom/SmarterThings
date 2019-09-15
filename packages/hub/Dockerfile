@@ -1,5 +1,4 @@
-FROM node:10.12.0-alpine
-#FROM node:10.12.0
+FROM node:12.10.0-alpine
 
 MAINTAINER Matt Strom [matt@mattstrom.com]
 

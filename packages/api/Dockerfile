@@ -1,4 +1,4 @@
-FROM node:10.12.0 AS build
+FROM node:12.10.0 AS build
 
 MAINTAINER Matt Strom [matt@mattstrom.com]
 
@@ -14,7 +14,7 @@ RUN \
 	npm run build
 
 
-FROM node:10.12.0-alpine
+FROM node:12.10.0-alpine
 
 COPY --from=build /build/dist ./dist
 COPY --from=build /build/data ./data
