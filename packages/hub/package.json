@@ -1,0 +1,38 @@
+{
+  "name": "hub",
+  "version": "1.0.0",
+  "description": "Mock for SmartThings Hub",
+  "main": ".build/handler.js",
+  "keywords": [
+    "serverless",
+    "webtasks"
+  ],
+  "scripts": {
+    "prestart": "npm run clean",
+    "start": "serverless offline start",
+    "clean": "rimraf .build"
+  },
+  "dependencies": {
+    "elasticsearch": "^15.1.1",
+    "handy-redis": "^1.3.2",
+    "http-status-codes": "^1.3.0",
+    "node-fetch": "^2.2.0",
+    "redis": "^2.8.0",
+    "request": "^2.88.0",
+    "rxjs": "^6.3.3"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.1",
+    "@types/elasticsearch": "^5.0.26",
+    "@types/node": "^8.10.38",
+    "@types/node-fetch": "^2.1.2",
+    "@types/redis": "^2.8.6",
+    "@types/request": "^2.47.1",
+    "@webtask/serverless-webtasks": "^1.0.1",
+    "rimraf": "^2.6.2",
+    "serverless": "^1.31.0",
+    "serverless-offline": "^3.25.12",
+    "serverless-plugin-typescript": "^1.1.5",
+    "typescript": "^3.0.3"
+  }
+}

@@ -1,0 +1,19 @@
+FROM node:10.12.0-alpine
+#FROM node:10.12.0
+
+MAINTAINER Matt Strom [matt@mattstrom.com]
+
+ENV ACCESS_URL=""
+
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install
+RUN mkdir -p /build && cp -a /tmp/node_modules /build
+
+WORKDIR /build
+ADD . /build
+
+RUN npm install
+
+EXPOSE 3000
+
+CMD ["npx", "serverless", "offline", "start"]
