@@ -11,17 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://mattstrom.visualstudio.com/DefaultCollection/_git/SmartThings"
+    "url": "https://github.com/mattstrom/SmarterThings"
   },
   "author": "Matt Strom",
   "license": "ISC",
-  "dependencies": {
-    "mqtt": "^2.18.8"
-  },
+  "dependencies": {},
   "devDependencies": {
     "lerna": "^3.6.0",
-    "serverless": "^1.35.0",
-    "tslint": "^5.11.0",
-    "typescript": "^3.2.2"
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.3"
   }
 }

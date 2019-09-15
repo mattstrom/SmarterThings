@@ -1,5 +1,5 @@
 {
-  "name": "hub",
+  "name": "@mattstrom/smarterthings-hub",
   "version": "1.0.0",
   "description": "Mock for SmartThings Hub",
   "main": ".build/handler.js",
