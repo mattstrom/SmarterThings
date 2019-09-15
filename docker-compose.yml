@@ -1,0 +1,21 @@
+version: '3.6'
+services:
+  api:
+    build:
+      context: packages/api
+    env_file: .env
+    ports:
+      - 5001:5001
+  nginx:
+    build:
+      context: packages/nginx
+    links:
+      - api
+      - ui
+    ports:
+      - 80:80
+  ui:
+    build:
+      context: packages/ui
+volumes:
+  smartthings-data:
