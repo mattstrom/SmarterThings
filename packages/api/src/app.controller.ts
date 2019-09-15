@@ -1,18 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
-// import { AppData } from './modules/smart-app/models';
+import { Controller, Get, Response } from '@nestjs/common';
+import { OK } from 'http-status-codes';
 
-@Controller('app')
+@Controller()
 export class AppController {
 
 	constructor() {}
 
-	@Get('')
-	async get() {
-		const payload = await import('./payload.json');
-		// const cls = plainToClass(AppData, payload);
-		const cls = {};
-
-		return cls;
+	@Get('ping')
+	async get(@Response() res) {
+		res.statusCode = OK;
+		res.send();
 	}
 }
