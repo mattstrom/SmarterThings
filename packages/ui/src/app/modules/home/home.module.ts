@@ -18,10 +18,12 @@ import { DisarmControlsComponent } from './components/disarm-controls/disarm-con
 import { QuickExitButtonComponent } from './components/quick-exit-button/quick-exit-button.component';
 import { DisarmButtonComponent } from './components/disarm-button/disarm-button.component';
 import { DashboardState } from './state';
+import { ArmButtonComponent } from './components/arm-button/arm-button.component';
 
 
 @NgModule({
 	declarations: [
+		ArmButtonComponent,
 		ArmControlsComponent,
 		HomeComponent,
 		DisarmControlsComponent,

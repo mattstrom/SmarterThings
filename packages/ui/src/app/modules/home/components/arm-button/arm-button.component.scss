@@ -1,0 +1,20 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %fill-parent;
+
+	a, button {
+		@extend %fill-parent;
+		@extend %stack-vertical;
+
+		justify-content: center;
+		align-items: center;
+
+		font-size: 1.8em;
+
+		mat-icon {
+			font-size: 4em;
+			width: unset;
+		}
+	}
+}

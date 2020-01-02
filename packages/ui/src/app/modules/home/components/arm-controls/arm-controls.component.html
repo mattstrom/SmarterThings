@@ -1,18 +1,14 @@
 <div class="left">
-	<button mat-raised-button (click)="onArmAway()">
-		<div>
-			<mat-icon>home</mat-icon>
-		</div>
-		<div>Arm (Away)</div>
-	</button>
+	<smt-arm-button [text]="'Arm Away'"
+					[icon]="'home'"
+					(click)="onArmAway()">
+	</smt-arm-button>
 </div>
 <div class="right">
-	<button mat-raised-button (click)="onArmStay()">
-		<div>
-			<mat-icon>home</mat-icon>
-		</div>
-		<div>Arm (Stay)</div>
-	</button>
+	<smt-arm-button [text]="'Arm Stay'"
+					[icon]="'home'"
+					(click)="onArmStay()">
+	</smt-arm-button>
 </div>
 <div class="entry">
 	<mat-slide-toggle [(ngModel)]="silentExit">
