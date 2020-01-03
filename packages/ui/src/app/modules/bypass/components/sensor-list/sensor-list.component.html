@@ -1,9 +1,29 @@
 <div class="scroll">
-	<smt-panel title="Sensors Not Ready">
-		<mat-list>
-			<mat-list-item *ngFor="let sensor of trippedSensors | async">
-				<smt-sensor-list-item [sensor]="sensor"></smt-sensor-list-item>
-			</mat-list-item>
-		</mat-list>
+	<smt-panel>
+		<smt-panel-header>
+			<div class="heading">
+				<div>
+					<mat-icon>keyboard_return</mat-icon>
+				</div>
+				<div>
+					Sensors Not Ready
+				</div>
+			</div>
+			<div class="device-count">
+				<mat-chip-list>
+					<mat-chip>{{ count$ | async }}</mat-chip>
+				</mat-chip-list>
+			</div>
+		</smt-panel-header>
+		<smt-panel-body>
+			<mat-list>
+				<ng-container *ngFor="let sensor of sorted$ | async">
+					<mat-list-item>
+						<smt-sensor-list-item [sensor]="sensor"></smt-sensor-list-item>
+					</mat-list-item>
+					<mat-divider></mat-divider>
+				</ng-container>
+			</mat-list>
+		</smt-panel-body>
 	</smt-panel>
 </div>

@@ -9,4 +9,36 @@
 		@extend %fill-parent;
 		overflow: scroll;
 	}
+
+	smt-panel {
+		@extend %fill-parent;
+	}
+
+	smt-panel-header {
+		@extend %stack-horizontal;
+		justify-content: space-between;
+		align-items: center;
+
+		.heading {
+			@extend %stack-horizontal;
+			justify-content: flex-start;
+			align-items: center;
+
+			mat-icon {
+				margin-right: 4px;
+			}
+		}
+
+		.device-count {}
+	}
+
+	smt-panel-body {
+		mat-list {
+			padding-top: 0;
+		}
+
+		mat-divider {
+			margin: 0 8px;
+		}
+	}
 }

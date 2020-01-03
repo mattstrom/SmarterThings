@@ -1,9 +1,45 @@
+@import '../../../../../styles/common';
+@import '../../../../../styles/theme';
+
+$accent: map-get($app-theme, accent);
+
 :host {
+	@extend %fill-parent;
+	display: grid;
+	grid-template-columns: 32px auto;
+	grid-template-rows: repeat(2, 50%);
+	grid-column-gap: 16px;
+	grid-template-areas:
+		'icon name'
+		'icon status';
+
+	padding: 8px;
+	font-size: smaller;
+
 	.active {
 		color: red;
 	}
 
 	.inactive {
 		color: green;
+	}
+
+	mat-icon {
+		grid-area: icon;
+		justify-self: center;
+		align-self: center;
+	}
+
+	.name {
+		grid-area: name;
+		align-self: self-end;
+		color: mat-color($accent);
+		font-weight: bold;
+	}
+
+	.status {
+		grid-area: status;
+		align-self: self-start;
+		text-transform: uppercase;
 	}
 }

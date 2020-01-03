@@ -1,5 +1,3 @@
-<div [class.active]="status === 'active'"
-	 [class.inactive]="status === 'inactive'">
-	<mat-icon matListIcon>{{icon}}</mat-icon>
-	{{sensor.name}}
-</div>
+<mat-icon matListIcon>{{icon}}</mat-icon>
+<div class="name">{{sensor.name}}</div>
+<div class="status">{{sensor.value}}</div>
