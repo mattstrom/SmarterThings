@@ -60,7 +60,7 @@ export class Sensors implements NgxsOnInit {
 			});
 	}
 
-	@Selector() static getSensorStatus(state: SensorsModel) {
+	@Selector() static getSensorStatus(state: SensorsModel): SensorStatus {
 		return (state.trippedSensors.length === 0)
 			? SensorStatus.Ready
 			: SensorStatus.NotReady;

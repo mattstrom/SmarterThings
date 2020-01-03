@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 import { AuthService } from './modules/auth/services';
 import { IdentityService, SensorsService, WebSocketService } from './services';
-import { LoadingStatus, SecuritySystem, SecuritySystemStateName, SecuritySystemStatus } from './state';
+import { LoadingStatus, SecuritySystem, SecuritySystemStateName, SecuritySystemStatus, SecuritySystemState } from './state';
 
 
 @Component({
@@ -27,7 +27,7 @@ export class AppComponent {
 	public status$: Observable<SecuritySystemStatus>;
 
 	@Select(SecuritySystem.getState)
-	public systemState$: Observable<SecuritySystemStateName>;
+	public systemState$: Observable<SecuritySystemState>;
 
 	@Select(SecuritySystem.getStatusMessage)
 	public statusMessage$: Observable<string>;

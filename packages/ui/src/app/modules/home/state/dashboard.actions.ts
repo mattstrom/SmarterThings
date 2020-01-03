@@ -26,3 +26,9 @@ export class SetRightPanel {
 
 	constructor(public panel: DashboardPanel, public width: string = '50%') {}
 }
+
+export class SetPanels {
+	static readonly type = '[Dashboard] Set Panels';
+
+	constructor(public left: DashboardPanel, public right: DashboardPanel, public width: string = '50%') {}
+}

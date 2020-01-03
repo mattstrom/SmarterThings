@@ -182,7 +182,7 @@ export class SecuritySystem implements NgxsOnInit {
 	}
 
 	@Selector()
-	static getColor(state: SecuritySystemModel) {
+	static getColor(state: SecuritySystemModel): string {
 		switch (state.state) {
 			case 'armed':
 				return 'warn';
@@ -212,7 +212,7 @@ export class SecuritySystem implements NgxsOnInit {
 		return state.status;
 	}
 
-	@Selector() static getStatusMessage(state: SecuritySystemModel) {
+	@Selector() static getStatusMessage(state: SecuritySystemModel): string {
 		switch (state.state) {
 			case SecuritySystemState.Armed:
 				return 'System is armed';

@@ -14,7 +14,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
 	public percentage$: Observable<number>;
 
 	@Select(SecuritySystem.getColor)
-	color$: Observable<number>;
+	color$: Observable<string>;
 
 	@Select(SecuritySystem.getCountdown)
 	countdown$: Observable<number>;

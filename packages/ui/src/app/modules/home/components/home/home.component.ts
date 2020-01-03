@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
-import { SecuritySystem, SecuritySystemStateName, Sensors, SensorStatus } from '../../../../state';
+import { SecuritySystem, SecuritySystemState, Sensors, SensorStatus } from '../../../../state';
 import { DashboardPanel, DashboardState } from '../../state';
 
 
@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
 	public sensorStatus$: Observable<SensorStatus>;
 
 	@Select(SecuritySystem.getState)
-	public state$: Observable<SecuritySystemStateName>;
+	public state$: Observable<SecuritySystemState>;
 
 	@Select(DashboardState.leftPanel)
 	public leftPanel$: Observable<DashboardPanel>;
@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
 	@Select(DashboardState.rightPanel)
 	public rightPanel$: Observable<DashboardPanel>;
 
-	public state: SecuritySystemStateName;
+	public state: SecuritySystemState;
 
 	constructor() {}
 

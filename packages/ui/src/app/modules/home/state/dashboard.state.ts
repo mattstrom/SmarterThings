@@ -1,7 +1,7 @@
-import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
-import { combineLatest } from 'rxjs';
-import { SecuritySystem, SecuritySystemState, Sensors } from '../../../state';
-import { DashboardPanel, SetLeftPanel, SetRightPanel, ShowBypassedSensors } from './dashboard.actions';
+import { Action, Selector, State } from '@ngxs/store';
+
+import { SecuritySystem, SecuritySystemState, Sensors, SensorStatus } from '../../../state';
+import { DashboardPanel, ShowBypassedSensors } from './dashboard.actions';
 
 
 export interface DashboardStateModel {
@@ -18,77 +18,57 @@ export interface DashboardStateModel {
 })
 export class DashboardState {
 
-	constructor(private readonly store: Store) {
-		combineLatest(
-			this.store.select(SecuritySystem.getState),
-			this.store.select(Sensors.getSensorStatus)
-		)
-			.subscribe(([state, sensorStatus]) => {
-				switch (state) {
-					case SecuritySystemState.Armed: {
-						this.store.dispatch(new SetLeftPanel(DashboardPanel.DisarmControls));
-						this.store.dispatch(new SetRightPanel(DashboardPanel.News));
-						break;
-					}
-					case SecuritySystemState.Arming: {
-						this.store.dispatch(new SetLeftPanel(DashboardPanel.Countdown));
-						this.store.dispatch(new SetRightPanel(DashboardPanel.Keypad));
-						break;
-					}
-					case SecuritySystemState.Disarmed: {
-						const leftAction = (sensorStatus === 'ready')
-							? new SetLeftPanel(DashboardPanel.ArmControls)
-							: new SetLeftPanel(DashboardPanel.BypassControls);
-
-						this.store.dispatch([
-							leftAction,
-							new SetRightPanel(DashboardPanel.News)
-						]);
-						break;
-					}
-					case SecuritySystemState.Disarming: {
-						this.store.dispatch(new SetLeftPanel(DashboardPanel.Countdown));
-						this.store.dispatch(new SetRightPanel(DashboardPanel.Keypad));
-						break;
-					}
-					case SecuritySystemState.Intrusion: {
-						this.store.dispatch(new SetLeftPanel(DashboardPanel.Countdown));
-						this.store.dispatch(new SetRightPanel(DashboardPanel.Keypad));
-						break;
-					}
-					default: {
-						throw new TypeError('Invalid security system state');
-					}
-				}
-			});
-	}
+	constructor() {}
 
 	@Action(ShowBypassedSensors)
 	showBypassedSensors() {
 
 	}
 
-	@Action(SetLeftPanel)
-	setLeftPanel(ctx: StateContext<DashboardStateModel>, payload: SetLeftPanel) {
-		ctx.patchState({
-			left: payload.panel
-		});
+	@Selector([SecuritySystem.getState, Sensors.getSensorStatus])
+	static leftPanel(
+		state: DashboardStateModel,
+		securitySystemState: SecuritySystemState,
+		sensorStatus: SensorStatus
+	): DashboardPanel {
+		switch (securitySystemState) {
+			case SecuritySystemState.Armed: {
+				return DashboardPanel.DisarmControls;
+			}
+			case SecuritySystemState.Disarmed: {
+				return (sensorStatus === 'ready')
+					? DashboardPanel.ArmControls
+					: DashboardPanel.BypassControls;
+			}
+			case SecuritySystemState.Arming:
+			case SecuritySystemState.Disarming:
+			case SecuritySystemState.Intrusion: {
+				return DashboardPanel.Countdown;
+			}
+			default: {
+				throw new TypeError('Invalid security system state');
+			}
+		}
 	}
 
-	@Action(SetRightPanel)
-	setRightPanel(ctx: StateContext<DashboardStateModel>, payload: SetRightPanel) {
-		ctx.patchState({
-			right: payload.panel
-		});
-	}
-
-	@Selector()
-	static leftPanel(state: DashboardStateModel) {
-		return state.left;
-	}
-
-	@Selector()
-	static rightPanel(state: DashboardStateModel) {
-		return state.right;
+	@Selector([SecuritySystem.getState])
+	static rightPanel(
+		state: DashboardStateModel,
+		securitySystemState: SecuritySystemState
+	): DashboardPanel {
+		switch (securitySystemState) {
+			case SecuritySystemState.Armed:
+			case SecuritySystemState.Disarmed: {
+				return DashboardPanel.News;
+			}
+			case SecuritySystemState.Arming:
+			case SecuritySystemState.Disarming:
+			case SecuritySystemState.Intrusion: {
+				return DashboardPanel.Keypad;
+			}
+			default: {
+				throw new TypeError('Invalid security system state');
+			}
+		}
 	}
 }
