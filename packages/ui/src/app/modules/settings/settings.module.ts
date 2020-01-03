@@ -4,13 +4,17 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { UiComponentsModule } from '../ui-components';
+import { SensorsComponent } from './components/sensors/sensors.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { SettingsGridComponent } from './components/settings-grid/settings-grid.component';
 import { UsersComponent } from './components/users/users.component';
 
 
 @NgModule({
 	declarations: [
+		SensorsComponent,
 		SettingsComponent,
+		SettingsGridComponent,
 		UsersComponent
 	],
 	imports: [
@@ -19,14 +23,23 @@ import { UsersComponent } from './components/users/users.component';
 		RouterModule.forChild([
 			{
 				path: '',
-				component: SettingsComponent
-			},
-			{
-				path: 'users',
-				component: UsersComponent
+				component: SettingsComponent,
+				children: [
+					{
+						path: '',
+						component: SettingsGridComponent
+					},
+					{
+						path: 'sensors',
+						component: SensorsComponent
+					},
+					{
+						path: 'users',
+						component: UsersComponent
+					}
+				]
 			}
 		]),
-
 		UiComponentsModule
 	]
 })

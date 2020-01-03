@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+
 
 @Component({
-  selector: 'smt-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+	selector: 'smt-settings',
+	templateUrl: './settings.component.html',
+	styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
 
-  constructor() { }
+	constructor(
+		private readonly route: ActivatedRoute,
+		private readonly router: Router
+	) {}
 
-  ngOnInit() {
-  }
-
+	onClick = () => {
+		this.router.navigate(['..'], { relativeTo: this.route });
+	}
 }

@@ -8,10 +8,15 @@ import { Component, OnInit } from '@angular/core';
 export class ForecastComponent implements OnInit {
 
 	public location: string = 'Concord';
-	public items = new Array(5).fill(0);
+	public items = [
+		{ name: 'M' },
+		{ name: 'T' },
+		{ name: 'W' },
+		{ name: 'T' },
+		{ name: 'F' }
+	];
 
-	constructor() {
-	}
+	constructor() {}
 
 	ngOnInit() {
 	}

@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+
 
 @Component({
-  selector: 'smt-forecast-tile',
-  templateUrl: './forecast-tile.component.html',
-  styleUrls: ['./forecast-tile.component.scss']
+	selector: 'smt-forecast-tile',
+	templateUrl: './forecast-tile.component.html',
+	styleUrls: ['./forecast-tile.component.scss']
 })
 export class ForecastTileComponent implements OnInit {
+	@Input() day: string;
 
-  constructor() { }
+	constructor() {
+	}
 
-  ngOnInit() {
-  }
+	ngOnInit() {
+	}
 
 }
