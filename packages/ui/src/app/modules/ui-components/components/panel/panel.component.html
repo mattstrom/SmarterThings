@@ -1,8 +1,11 @@
-<div>
-	<div class="header">
+<div class="header">
+	<ng-container *ngIf="header">
+		<ng-content select="smt-panel-header"></ng-content>
+	</ng-container>
+	<ng-container *ngIf="!header">
 		{{title}}
-	</div>
-	<div class="content">
-		<ng-content></ng-content>
-	</div>
+	</ng-container>
+</div>
+<div class="content">
+	<ng-content select="smt-panel-body"></ng-content>
 </div>

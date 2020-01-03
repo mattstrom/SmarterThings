@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ContentChild } from '@angular/core';
+import { PanelHeaderComponent } from './panel-header.component';
 
 @Component({
 	selector: 'smt-panel',
@@ -6,12 +7,12 @@ import { Component, Input, OnInit } from '@angular/core';
 	styleUrls: ['./panel.component.scss']
 })
 export class PanelComponent implements OnInit {
-	@Input() title: string;
+	@Input() title?: string | undefined;
 
-	constructor() {
-	}
+	@ContentChild(PanelHeaderComponent, { static: true })
+	header: PanelHeaderComponent;
 
-	ngOnInit() {
-	}
+	constructor() {}
 
+	ngOnInit() {}
 }

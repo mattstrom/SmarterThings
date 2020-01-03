@@ -1,0 +1,25 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %fill-parent;
+	display: block;
+
+	a, button {
+		@extend %fill-parent;
+
+		font-size: 1.2em;
+
+		::ng-deep .mat-button-wrapper {
+			@extend %fill-parent;
+			@extend %stack-vertical;
+
+			justify-content: center;
+			align-items: center;
+
+			mat-icon {
+				font-size: 2em;
+				width: unset;
+			}
+		}
+	}
+}

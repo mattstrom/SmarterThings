@@ -1,19 +1,36 @@
+@import '../../../../../styles/common';
 @import '../../../../../styles/theme';
 
-$primary: map-get($app-theme, primary);
+$primary: map-get($mat-dark-theme-background, card);
+$radius: 4px;
 
 :host {
+	@extend %fill-parent;
+	@extend %stack-vertical;
+	justify-content: stretch;
+	align-items: stretch;
+
 	.header {
-		background-color: mat-color($primary);
+		@extend %flex-no-grow;
+		background-color: $primary;
+		font-size: smaller;
 		padding: 8px;
+
+		border: {
+			top-left-radius: $radius;
+			top-right-radius: $radius;
+		}
 	}
 
 	.content {
-		padding: 8px;
+		@extend %flex-fill;
+
 		overflow: scroll;
 		border: {
-			color: mat-color($primary);
+			color: $primary;
 			style: solid;
+			bottom-left-radius: $radius;
+			bottom-right-radius: $radius;
 			top-width: 0;
 			bottom-width: 1px;
 			left-width: 1px;

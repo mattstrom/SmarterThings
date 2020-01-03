@@ -23,3 +23,9 @@
 	flex-grow: 0;
 	flex-shrink: 0;
 }
+
+%flex-fill {
+	flex-basis: auto;
+	flex-grow: 1;
+	flex-shrink: 1;
+}

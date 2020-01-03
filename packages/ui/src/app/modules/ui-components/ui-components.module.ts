@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -22,8 +23,9 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faDoorOpen, faUnlock, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
 
 import { ToolbarComponent, ToolbarProgressBarComponent } from './components';
-import { PanelComponent } from './components/panel/panel.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { PanelComponent, PanelBodyComponent, PanelHeaderComponent } from './components/panel';
+import { PushButtonComponent } from './components/push-button/push-button.component';
 import { SilentButtonComponent } from './components/silent-button/silent-button.component';
 
 
@@ -31,6 +33,7 @@ const MaterialComponents = [
 	MatBadgeModule,
 	MatButtonModule,
 	MatCardModule,
+	MatChipsModule,
 	MatDialogModule,
 	MatDividerModule,
 	MatGridListModule,
@@ -53,6 +56,9 @@ library.add(faDoorOpen, faUnlock, faVolumeMute);
 	declarations: [
 		FooterComponent,
 		PanelComponent,
+		PanelBodyComponent,
+		PanelHeaderComponent,
+		PushButtonComponent,
 		SilentButtonComponent,
 		ToolbarComponent,
 		ToolbarProgressBarComponent
@@ -67,10 +73,14 @@ library.add(faDoorOpen, faUnlock, faVolumeMute);
 		FaIconComponent,
 		FooterComponent,
 		PanelComponent,
+		PanelBodyComponent,
+		PanelHeaderComponent,
+		PushButtonComponent,
 		SilentButtonComponent,
 		ToolbarComponent,
 		ToolbarProgressBarComponent,
 		...MaterialComponents
 	]
 })
-export class UiComponentsModule { }
+export class UiComponentsModule {
+}
