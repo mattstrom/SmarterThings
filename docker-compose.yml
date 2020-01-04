@@ -4,6 +4,8 @@ services:
     build:
       context: packages/api
     env_file: .env
+    environment:
+      NODE_CONFIG_DIR: /app/dist/config
     ports:
       - 5001:5001
   nginx:

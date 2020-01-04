@@ -1,18 +1,13 @@
 import { INestApplicationContext } from '@nestjs/common';
-import { NestApplicationContext } from '@nestjs/core';
-import { CustomTransportStrategy } from '@nestjs/microservices';
 import { Server, Socket } from 'net';
 import * as net from 'net';
 import * as repl from 'repl';
-import * as winston from 'winston';
-
-import { Logger } from '../modules/logging';
 
 interface ReplOptions {
 	context: INestApplicationContext;
 }
 
-export class ReplServer implements CustomTransportStrategy {
+export class ReplServer {
 	private server: Server;
 
 	constructor(private readonly options: ReplOptions) {

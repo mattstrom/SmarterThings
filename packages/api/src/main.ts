@@ -36,14 +36,14 @@ async function bootstrap() {
 		ready = true;
 	});
 
-	const repl = await NestFactory.createMicroservice(ReplModule, {
-		strategy: new ReplServer({
-			context: app
-		}),
-		logger: new Logger()
-	});
-
-	repl.listen(() => {});
+	// const repl = await NestFactory.createMicroservice(ReplModule, {
+	// 	strategy: new ReplServer({
+	// 		context: app
+	// 	}),
+	// 	logger: new Logger()
+	// });
+	//
+	// repl.listen(() => {});
 
 	createTerminus(app.getHttpServer(), {
 		signal: 'SIGINT',
