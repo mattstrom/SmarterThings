@@ -1,4 +1,5 @@
 import { INestApplicationContext } from '@nestjs/common';
+import { CustomTransportStrategy } from '@nestjs/microservices';
 import { Server, Socket } from 'net';
 import * as net from 'net';
 import * as repl from 'repl';
@@ -7,7 +8,7 @@ interface ReplOptions {
 	context: INestApplicationContext;
 }
 
-export class ReplServer {
+export class ReplServer implements CustomTransportStrategy {
 	private server: Server;
 
 	constructor(private readonly options: ReplOptions) {
