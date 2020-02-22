@@ -2,7 +2,7 @@ import { HttpEvent, HttpEventType, HttpHandler, HttpInterceptor, HttpRequest } f
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { SetLoadingStatus } from '../state';
 
 
@@ -18,6 +18,9 @@ export class LoadingStatusInterceptor implements HttpInterceptor {
 				if (event.type === HttpEventType.Response) {
 					this.store.dispatch(new SetLoadingStatus(false));
 				}
+			}),
+			catchError(err => {
+				return this.store.dispatch(new SetLoadingStatus(false));
 			})
 		);
 	}

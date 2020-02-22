@@ -3,6 +3,7 @@ import { Inject } from '@angular/core';
 import { Action, NgxsOnInit, Selector, State, StateContext, Store } from '@ngxs/store';
 import { interval } from 'rxjs';
 import { map, takeWhile, tap } from 'rxjs/operators';
+import { AuthService } from '../modules/auth/services';
 
 import { WebSocketService } from '../services';
 import { ApiUrlToken } from '../tokens';
@@ -41,6 +42,7 @@ export interface SecuritySystemModel {
 export class SecuritySystem implements NgxsOnInit {
 
 	constructor(
+		private readonly authService: AuthService,
 		private readonly http: HttpClient,
 		private readonly store: Store,
 		private webSocketService: WebSocketService,
@@ -85,6 +87,10 @@ export class SecuritySystem implements NgxsOnInit {
 
 	@Action(CheckStatus)
 	private checkStatus({ patchState }: StateContext<SecuritySystemModel>) {
+		if (!this.authService.isAuthenticated()) {
+			return;
+		}
+
 		this.http
 			.post<any>(`${this.apiUrl}/security/status`, {})
 			.subscribe((body) => {

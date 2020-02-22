@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Inject } from '@angular/core';
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { Sensor } from '../models';
+import { AuthService } from '../modules/auth/services';
 
 import { ApiUrlToken } from '../tokens';
 import { BypassSensors, GetSensors } from './sensors.actions';
@@ -32,6 +33,7 @@ export interface SensorsModel {
 export class Sensors implements NgxsOnInit {
 
 	constructor(
+		private readonly authService: AuthService,
 		private readonly http: HttpClient,
 		@Inject(ApiUrlToken) private readonly apiUrl: string
 	) {}
@@ -47,6 +49,10 @@ export class Sensors implements NgxsOnInit {
 
 	@Action(GetSensors)
 	getSensors({ patchState }: StateContext<SensorsModel>) {
+		if (!this.authService.isAuthenticated()) {
+			return;
+		}
+
 		this.http.get(`${this.apiUrl}/security/sensors`)
 			.subscribe((sensors: Sensor[]) => {
 				patchState({
