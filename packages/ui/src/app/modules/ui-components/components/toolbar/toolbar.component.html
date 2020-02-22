@@ -28,8 +28,12 @@
 	</ng-container>
 	<ng-container *ngIf="!authService.isAuthenticated()">
 		<a mat-menu-item (click)="onLogout()">
-			<mat-icon>login</mat-icon>
+			<mat-icon>account_circle</mat-icon>
 			Login
+		</a>
+		<a mat-menu-item (click)="onRegister()">
+			<mat-icon>face</mat-icon>
+			Register
 		</a>
 	</ng-container>
 

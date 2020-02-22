@@ -1,12 +1,12 @@
 <form #registerForm="ngForm">
-	<mat-form-field>
-		<input matInput type="text" name="email"
-			   placeholder="Email" required
+	<mat-form-field appearance="fill">
+		<mat-label>Email</mat-label>
+		<input matInput type="text" name="email" required
 			   [(ngModel)]="model.credentials.email" />
 	</mat-form-field>
-	<mat-form-field>
-		<input matInput type="password" name="password"
-			   placeholder="Password" required
+	<mat-form-field appearance="fill">
+		<mat-label>Password</mat-label>
+		<input matInput type="password" name="password"required
 			   [(ngModel)]="model.credentials.password" />
 	</mat-form-field>
 	<button mat-raised-button color="primary" (click)="onRegister()">Register</button>

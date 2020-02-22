@@ -3,7 +3,7 @@
 		<mat-icon style="vertical-align: text-bottom;">radio_button_unchecked</mat-icon>
 		SmarterThings Security Keypad
 	</div>
-	<div class="buttons">
+	<div class="buttons" *ngIf="authService.isAuthenticated()">
 		<button mat-button [routerLink]="['settings', 'sensors']">
 			<mat-icon>devices</mat-icon>
 			Sensors

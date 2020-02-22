@@ -1,6 +1,8 @@
 <smt-toolbar [loading]="loading$ | async"
 			 [color]="color$ | async">
-	{{ statusMessage$ | async }}
+	<ng-container *ngIf="authService.isAuthenticated()">
+		{{ statusMessage$ | async }}
+	</ng-container>
 </smt-toolbar>
 <div>
 	<router-outlet></router-outlet>
