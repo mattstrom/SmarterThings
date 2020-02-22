@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 import { AuthService } from './modules/auth/services';
 import { IdentityService, SensorsService, WebSocketService } from './services';
-import { LoadingStatus, SecuritySystem, SecuritySystemStateName, SecuritySystemStatus, SecuritySystemState } from './state';
+import { LoadingStatus, SecuritySystem, SecuritySystemState, SecuritySystemStatus } from './state';
 
 
 @Component({
@@ -15,8 +15,6 @@ import { LoadingStatus, SecuritySystem, SecuritySystemStateName, SecuritySystemS
 	styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-	public oauthUrl: string;
-
 	@Select(SecuritySystem.getColor)
 	public color$: Observable<string>;
 
@@ -40,7 +38,7 @@ export class AppComponent {
 		private sensors: SensorsService,
 		private webSocketService: WebSocketService
 	) {
-		this.updates.available.subscribe(async event => {
+		this.updates.available.subscribe(async () => {
 			await this.updates.activateUpdate();
 			location.reload();
 		});
@@ -48,10 +46,10 @@ export class AppComponent {
 		webSocketService.message$.subscribe((data) => {
 			console.log(data);
 		});
-	}
 
-	onLogout() {
-		this.authService.logout();
-		this.router.navigate(['/login']);
+		this.systemState$.subscribe((state) => {
+			const utterance = new SpeechSynthesisUtterance(state);
+			window.speechSynthesis.speak(utterance);
+		});
 	}
 }
