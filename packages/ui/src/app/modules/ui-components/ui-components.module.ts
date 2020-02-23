@@ -23,10 +23,12 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faDoorOpen, faUnlock, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
 
 import { ToolbarComponent, ToolbarProgressBarComponent } from './components';
+import { CarouselPanelDirective } from './components/carousel/carousel-panel.directive';
 import { FooterComponent } from './components/footer/footer.component';
 import { PanelComponent, PanelBodyComponent, PanelHeaderComponent } from './components/panel';
 import { PushButtonComponent } from './components/push-button/push-button.component';
 import { SilentButtonComponent } from './components/silent-button/silent-button.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
 
 
 const MaterialComponents = [
@@ -49,11 +51,12 @@ const MaterialComponents = [
 	MatToolbarModule
 ];
 
-
 library.add(faDoorOpen, faUnlock, faVolumeMute);
 
 @NgModule({
 	declarations: [
+		CarouselComponent,
+		CarouselPanelDirective,
 		FooterComponent,
 		PanelComponent,
 		PanelBodyComponent,
@@ -70,6 +73,8 @@ library.add(faDoorOpen, faUnlock, faVolumeMute);
 		...MaterialComponents
 	],
 	exports: [
+		CarouselComponent,
+		CarouselPanelDirective,
 		FaIconComponent,
 		FooterComponent,
 		PanelComponent,

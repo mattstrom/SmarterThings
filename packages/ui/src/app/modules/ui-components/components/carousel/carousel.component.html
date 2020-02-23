@@ -1,0 +1,5 @@
+<section #carousel (click)="onAdvance()">
+	<ng-container *ngIf="panels.length !== 0"
+				  [ngTemplateOutlet]="(currentPanel$ | async).templateRef">
+	</ng-container>
+</section>

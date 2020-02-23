@@ -1,0 +1,7 @@
+@import '../../../../../styles/common';
+
+:host {
+	section {
+		@extend %fill-parent;
+	}
+}
