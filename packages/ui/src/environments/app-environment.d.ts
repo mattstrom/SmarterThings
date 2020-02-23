@@ -3,4 +3,6 @@ declare interface EnvironmentContext {
 	apiUrl: string;
 	wsUrl: string;
 	whitelistedDomains: string[];
+	openWeatherMapApiKey: string;
+	zipCode: string;
 }

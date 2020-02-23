@@ -1,0 +1,25 @@
+@import '../../../../../styles/common';
+
+:host {
+	@extend %fill-parent;
+	@extend %stack-vertical;
+	align-items: stretch;
+
+	.title, .location {
+		@extend %flex-no-grow;
+		align-self: center;
+	}
+
+	.title {
+		flex-basis: 40px;
+	}
+
+	.main {
+		@extend %flex-fill;
+	}
+
+	.location {
+		flex-basis: 60px;
+		font-weight: bold;
+	}
+}

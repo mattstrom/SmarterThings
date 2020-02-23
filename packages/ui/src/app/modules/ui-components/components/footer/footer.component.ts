@@ -8,5 +8,5 @@ import { AuthService } from '../../../auth/services';
 })
 export class FooterComponent {
 
-	constructor(private readonly authService: AuthService) {}
+	constructor(public readonly authService: AuthService) {}
 }

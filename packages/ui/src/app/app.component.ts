@@ -31,7 +31,7 @@ export class AppComponent {
 	public statusMessage$: Observable<string>;
 
 	constructor(
-		private authService: AuthService,
+		public authService: AuthService,
 		private identityService: IdentityService,
 		private router: Router,
 		private updates: SwUpdate,

@@ -1,0 +1,7 @@
+<smt-rotating-panel title="Hourly Forecast">
+	<div class="weather">
+		<smt-forecast-tile *ngFor="let hourly of forecast$ | async"
+						   [forecast]="hourly">
+		</smt-forecast-tile>
+	</div>
+</smt-rotating-panel>

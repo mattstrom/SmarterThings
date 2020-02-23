@@ -1,0 +1,20 @@
+<smt-rotating-panel title="Current Weather">
+	<div class="weather" *ngIf="weather">
+		<div class="temperature">
+			{{ weather.temperature.current | number:'1.0-0' }}&deg;
+		</div>
+		<div class="icon">
+			<img [src]="iconUrl" />
+		</div>
+		<div class="range">
+			<div>H</div>
+			<div>
+				{{ weather.temperature.max | number:'1.0-0' }}&deg;
+			</div>
+			<div>L</div>
+			<div>
+				{{ weather.temperature.min | number:'1.0-0' }}&deg;
+			</div>
+		</div>
+	</div>
+</smt-rotating-panel>

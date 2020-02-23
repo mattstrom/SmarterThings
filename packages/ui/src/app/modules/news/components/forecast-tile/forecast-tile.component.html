@@ -1,1 +1,12 @@
-<div>{{ day }}</div>
+<div class="dow">
+	{{ forecast.dayOfWeek }}
+</div>
+<div class="icon">
+	<img [src]="iconUrl" />
+</div>
+<div class="high">
+	{{ forecast.temperature.max | number:'1.0-0' }}&deg;
+</div>
+<div class="low">
+	{{ forecast.temperature.min | number:'1.0-0' }}&deg;
+</div>

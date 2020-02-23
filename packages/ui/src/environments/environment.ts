@@ -9,5 +9,7 @@ export const environment: EnvironmentContext = {
 	wsUrl: 'wss://keypad.mattstrom.com',
 	whitelistedDomains: [
 		'https://keypad.mattstrom.com'
-	]
+	],
+	openWeatherMapApiKey: '85d1016a800249dcff138643c256109f',
+	zipCode: '94520'
 };

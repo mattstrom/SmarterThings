@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { DailyForecast } from '../../state';
+import { getIconUrl } from '../../utils';
+
 
 @Component({
 	selector: 'smt-forecast-tile',
@@ -7,12 +10,13 @@ import { Component, OnInit, Input } from '@angular/core';
 	styleUrls: ['./forecast-tile.component.scss']
 })
 export class ForecastTileComponent implements OnInit {
-	@Input() day: string;
+	@Input() forecast: DailyForecast;
 
-	constructor() {
-	}
+	iconUrl: string = '';
+
+	constructor() {}
 
 	ngOnInit() {
+		this.iconUrl = getIconUrl(this.forecast.icon);
 	}
-
 }

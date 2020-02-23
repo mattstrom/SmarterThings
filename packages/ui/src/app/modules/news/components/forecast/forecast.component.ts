@@ -1,23 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
+
+import { Weather } from '../../state';
+import { map } from 'rxjs/operators';
+
 
 @Component({
 	selector: 'smt-forecast',
 	templateUrl: './forecast.component.html',
 	styleUrls: ['./forecast.component.scss']
 })
-export class ForecastComponent implements OnInit {
-
-	public location: string = 'Concord';
-	public items = [
-		{ name: 'M' },
-		{ name: 'T' },
-		{ name: 'W' },
-		{ name: 'T' },
-		{ name: 'F' }
-	];
+export class ForecastComponent {
+	@Select(Weather.getForecast)
+	forecast$: Observable<any[]>;
 
 	constructor() {}
-
-	ngOnInit() {
-	}
 }
