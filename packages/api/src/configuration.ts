@@ -35,7 +35,7 @@ const schema = convict<Config>({
 		},
 		api: {
 			format: 'url',
-			default: 'https://api.mattstrom.com',
+			default: 'https://keypad.mattstrom.com/api',
 			env: 'API_URL'
 		},
 		endpoint: {
@@ -45,12 +45,12 @@ const schema = convict<Config>({
 		},
 		inbound: {
 			format: 'url',
-			default: 'https://inbound.mattstrom.com',
+			default: 'https://keypad.mattstrom.com/inbound',
 			env: 'INBOUND_URL'
 		},
 		redirect: {
 			format: 'url',
-			default: 'https://ui.mattstrom.com/keypad',
+			default: 'https://keypad.mattstrom.com/inbound/oauth/callback',
 			env: 'REDIRECT_URL'
 		}
 	},
@@ -66,7 +66,7 @@ const schema = convict<Config>({
 	},
 	serverId: {
 		format: 'url',
-		default: 'https://api.mattstrom.com',
+		default: 'https://keypad.mattstrom.com',
 		env: 'SERVER_ID'
 	},
 	smartthings: {
