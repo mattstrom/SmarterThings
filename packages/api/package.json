@@ -36,7 +36,7 @@
     "class-transformer": "^0.2.3",
     "class-validator": "^0.10.0",
     "config": "^3.2.2",
-    "convict": "^5.1.0",
+    "convict": "^6.2.2",
     "cookie-parser": "^1.4.4",
     "helmet": "^3.21.0",
     "http-signature": "^1.2.0",
