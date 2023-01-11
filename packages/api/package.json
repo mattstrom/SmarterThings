@@ -34,7 +34,7 @@
     "app-root-path": "^2.2.1",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.2.3",
-    "class-validator": "^0.10.0",
+    "class-validator": "^0.14.0",
     "config": "^3.2.2",
     "convict": "^5.1.0",
     "cookie-parser": "^1.4.4",
